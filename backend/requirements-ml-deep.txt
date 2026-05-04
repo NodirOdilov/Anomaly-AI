@@ -1,0 +1,2 @@
+# Optional: legacy deep learning stacks (not required for baseline MVP).
+# tensorflow>=2.15.0

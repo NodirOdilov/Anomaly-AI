@@ -1,0 +1,7 @@
+payload,label
+"q=search&page=1",benign
+"id=1' OR '1'='1",sql_injection
+"<img src=x onerror=alert(1)>",xss
+"file=....//....//etc/passwd",path_traversal
+"cmd=; ls -la",command_injection
+"hello world",benign

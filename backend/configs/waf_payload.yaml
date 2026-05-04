@@ -1,0 +1,21 @@
+project: "Anomaly AI"
+model_type: "waf_payload_detector"
+version: "1.0.0"
+
+paths:
+  train_json: "data/samples/sample_payloads.json"
+  train_csv: "data/processed/waf_train.csv"
+  model_out: "models/waf_payload_model.joblib"
+  report_out: "reports/waf_payload_report.md"
+
+train:
+  test_size: 0.25
+  random_state: 42
+  vectorizer:
+    analyzer: "char"
+    ngram_min: 2
+    ngram_max: 5
+    max_features: 50000
+  classifier: "logistic_regression"
+  lr_c: 1.0
+  max_iter: 2000

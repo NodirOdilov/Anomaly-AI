@@ -1,0 +1,9 @@
+legacy
+**/node_modules
+.git
+**/__pycache__
+**/.pytest_cache
+frontend/node_modules
+landing/node_modules
+*.md
+!README.md

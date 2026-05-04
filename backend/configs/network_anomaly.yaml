@@ -1,0 +1,19 @@
+project: "Anomaly AI"
+model_type: "network_anomaly_detector"
+version: "1.0.0"
+
+paths:
+  train_csv: "data/samples/sample_network_flows.csv"
+  model_out: "models/network_anomaly_model.joblib"
+  report_out: "reports/network_anomaly_report.md"
+
+train:
+  test_size: 0.25
+  random_state: 42
+  label_column: "Label"
+  drop_columns:
+    - "Flow ID"
+    - "Source IP"
+    - "Destination IP"
+  model: "random_forest"
+  rf_n_estimators: 100
