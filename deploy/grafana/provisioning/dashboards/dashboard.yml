@@ -1,0 +1,12 @@
+# Авто-провижининг дашбордов из директории /etc/grafana/provisioning/dashboards.
+apiVersion: 1
+providers:
+  - name: anomaly-ai
+    orgId: 1
+    folder: ""
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

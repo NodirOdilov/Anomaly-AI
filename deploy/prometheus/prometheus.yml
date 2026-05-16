@@ -1,0 +1,21 @@
+# Prometheus конфигурация для Anomaly AI v2.
+# Скрейпит /metrics эндпоинт бэкенда каждые 15 секунд.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    service: anomaly-ai
+    environment: docker-compose
+
+scrape_configs:
+  - job_name: anomaly-ai-backend
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["anomaly-ai-backend:8000"]
+        labels:
+          component: backend
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]

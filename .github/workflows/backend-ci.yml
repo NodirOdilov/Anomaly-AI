@@ -2,28 +2,101 @@ name: backend-ci
 
 on:
   push:
+    branches: [main]
     paths:
       - "backend/**"
+      - "requirements.txt"
       - ".github/workflows/backend-ci.yml"
   pull_request:
     paths:
       - "backend/**"
+      - "requirements.txt"
       - ".github/workflows/backend-ci.yml"
 
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  lint:
+    name: Lint + bandit
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
       - name: Install dependencies
-        run: pip install -r requirements-dev.txt
-      - name: Pytest
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Ruff
+        working-directory: backend
+        run: ruff check src tests
+
+      - name: Bandit (поверхностный security scan)
+        working-directory: backend
+        run: bandit -c pyproject.toml -r src -q
+
+  test:
+    name: Pytest + coverage
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run tests with coverage
+        working-directory: backend
         env:
           PYTHONPATH: src
-        run: python -m pytest
+          APP_ENV: test
+          DATABASE_URL: sqlite+aiosqlite:///./data/test.db
+          AUTH_REQUIRED: "false"
+          JWT_SECRET: ci-test-secret-do-not-use-in-prod
+        run: pytest --cov=anomaly_ai --cov-report=term-missing --cov-report=xml
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: backend/coverage.xml
+          if-no-files-found: warn
+
+  audit:
+    name: pip-audit (известные CVE)
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Run pip-audit
+        working-directory: backend
+        run: pip-audit -r requirements.txt || true

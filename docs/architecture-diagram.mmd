@@ -1,0 +1,111 @@
+flowchart TB
+    subgraph CLIENT["CLIENT TIER"]
+        direction LR
+        sensor["Edge Sensor"]
+        console["Analyst Console"]
+        sdk["CLI / SDK"]
+    end
+
+    nginx["Nginx Reverse Proxy"]
+
+    subgraph GATEWAY["API GATEWAY · FastAPI"]
+        direction TB
+        mw["Middleware Stack"]
+        rest["REST API v1+v2"]
+        ws["WebSocket alerts"]
+        oas["OpenAPI docs"]
+    end
+
+    subgraph DOMAIN["DOMAIN SERVICES"]
+        direction TB
+        auth["Auth Service"]
+        waf_svc["WAF Classifier"]
+        net_svc["Network Anomaly"]
+        registry_svc["ML Registry"]
+        drift_svc["Drift Detector"]
+        explain_svc["Explainability"]
+        alert_svc["Alert Manager"]
+        ti_svc["Threat Intel"]
+    end
+
+    subgraph STORAGE["PERSISTENCE TIER"]
+        direction LR
+        pg[("PostgreSQL")]
+        redis[("Redis")]
+        fs[("Artifact Store")]
+    end
+
+    subgraph OBS["OBSERVABILITY"]
+        direction LR
+        slog["structlog"]
+        prom["Prometheus"]
+        graf["Grafana"]
+        sentry["Sentry"]
+    end
+
+    subgraph EXT["EXTERNAL"]
+        direction LR
+        siem["SIEM Endpoints"]
+        feeds["Threat Intel Feeds"]
+    end
+
+    sensor ==>|POST /waf/predict| nginx
+    console ==>|REST + JWT| nginx
+    sdk ==>|REST + API Key| nginx
+    nginx ==> mw
+    mw --> rest
+    mw --> ws
+    mw -.-> oas
+
+    rest --> auth
+    rest --> waf_svc
+    rest --> net_svc
+    rest --> drift_svc
+    rest --> registry_svc
+    rest --> explain_svc
+    rest --> ti_svc
+
+    waf_svc -.-> explain_svc
+    net_svc -.-> explain_svc
+    waf_svc --> alert_svc
+    net_svc --> alert_svc
+    drift_svc --> alert_svc
+    waf_svc -.-> ti_svc
+    net_svc -.-> ti_svc
+
+    auth --> pg
+    auth --> redis
+    rest -.-> pg
+    waf_svc -.-> redis
+    net_svc -.-> redis
+    registry_svc --> fs
+    drift_svc --> pg
+    alert_svc --> pg
+    ti_svc --> pg
+
+    alert_svc ==>|JSON / CEF| siem
+    alert_svc -.-> ws
+    ws -.-> console
+    feeds -.-> ti_svc
+
+    mw -.-> slog
+    rest -.-> prom
+    waf_svc -.-> prom
+    prom --> graf
+    rest -.-> sentry
+
+    classDef cli fill:#082f49,stroke:#22d3ee,color:#e0f2fe
+    classDef edgeNode fill:#1e1b4b,stroke:#a78bfa,color:#ede9fe
+    classDef gw fill:#0c4a6e,stroke:#38bdf8,color:#e0f2fe
+    classDef svc fill:#3b0764,stroke:#c084fc,color:#f5f3ff
+    classDef store fill:#451a03,stroke:#f97316,color:#fff7ed
+    classDef obs fill:#052e16,stroke:#22c55e,color:#f0fdf4
+    classDef extcls fill:#450a0a,stroke:#f43f5e,color:#fef2f2
+
+    class sensor,console,sdk cli
+    class nginx edgeNode
+    class mw,rest,ws,oas gw
+    class auth,waf_svc,net_svc,registry_svc,drift_svc,explain_svc,alert_svc,ti_svc svc
+    class pg,redis,fs store
+    class slog,prom,graf,sentry obs
+    class siem,feeds extcls

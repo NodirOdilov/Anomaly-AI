@@ -8,6 +8,8 @@ const mobileLinks = [
   { to: '/waf', label: 'WAF' },
   { to: '/network', label: 'Сеть' },
   { to: '/reports', label: 'Отчёты' },
+  { to: '/alerts', label: 'Алерты' },
+  { to: '/admin/audit', label: 'Аудит' },
   { to: '/docs', label: 'Документация' },
 ] as const
 

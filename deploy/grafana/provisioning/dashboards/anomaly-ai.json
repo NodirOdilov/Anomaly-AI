@@ -1,0 +1,87 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Всего предсказаний",
+      "datasource": "Prometheus",
+      "fieldConfig": {"defaults": {"unit": "short"}},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "targets": [{"expr": "sum(anomaly_ai_predictions_total)"}]
+    },
+    {
+      "type": "stat",
+      "title": "Активные HTTP запросы",
+      "datasource": "Prometheus",
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "targets": [{"expr": "sum(anomaly_ai_http_requests_in_progress)"}]
+    },
+    {
+      "type": "stat",
+      "title": "Алертов сгенерировано",
+      "datasource": "Prometheus",
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+      "targets": [{"expr": "sum(anomaly_ai_alerts_emitted_total)"}]
+    },
+    {
+      "type": "gauge",
+      "title": "Drift score (WAF payload)",
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "yellow", "value": 0.1},
+              {"color": "red", "value": 0.25}
+            ]
+          }
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+      "targets": [{"expr": "anomaly_ai_model_drift_score{module=\"waf_payload\"}"}]
+    },
+    {
+      "type": "timeseries",
+      "title": "p95 латентность по эндпоинтам",
+      "datasource": "Prometheus",
+      "gridPos": {"h": 9, "w": 12, "x": 0, "y": 4},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (path, le) (rate(anomaly_ai_http_request_duration_seconds_bucket[5m])))",
+          "legendFormat": "{{path}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Предсказания / минуту по модулям",
+      "datasource": "Prometheus",
+      "gridPos": {"h": 9, "w": 12, "x": 12, "y": 4},
+      "targets": [
+        {
+          "expr": "sum by (module) (rate(anomaly_ai_predictions_total[1m]))",
+          "legendFormat": "{{module}}"
+        }
+      ]
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": ["anomaly-ai"],
+  "time": {"from": "now-15m", "to": "now"},
+  "timezone": "browser",
+  "title": "Anomaly AI — Overview",
+  "uid": "anomaly-ai-overview",
+  "version": 1,
+  "weekStart": ""
+}

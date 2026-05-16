@@ -1,24 +1,140 @@
+# Полный стек Anomaly AI v2: backend, frontend, Postgres, Redis, Prometheus, Grafana.
+# Поднимается одной командой: `docker compose up --build`.
+
 services:
+  # === Бэкенд FastAPI ===
   anomaly-ai-backend:
     build:
       context: ./backend
+      target: runtime
+    container_name: aa-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
       - "8000:8000"
     volumes:
       - ./backend/models:/app/models
       - ./backend/data:/app/data
     environment:
-      - APP_ENV=development
-      - PYTHONPATH=/app/src
-      - MODEL_DIR=/app/models
-      - DATA_DIR=/app/data
+      APP_ENV: production
+      DEBUG: "false"
+      PYTHONPATH: /app/src
+      MODEL_DIR: /app/models
+      DATA_DIR: /app/data
+      REPORTS_DIR: /app/reports
+      DATABASE_URL: postgresql+asyncpg://anomaly:anomaly@postgres:5432/anomaly_ai
+      REDIS_URL: redis://redis:6379/0
+      AUTH_REQUIRED: "true"
+      JWT_SECRET: ${JWT_SECRET:-please-override-in-prod-via-env}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-admin@anomaly.local}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-ChangeMe!2026}
+      LOG_JSON: "true"
+      METRICS_ENABLED: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - aa-net
 
+  # === Фронтенд (production-сборка под nginx) ===
   anomaly-ai-frontend:
     build:
       context: ./frontend
+      target: runtime
+    container_name: aa-frontend
     ports:
       - "5173:5173"
-    environment:
-      - VITE_API_BASE_URL=http://localhost:8000
     depends_on:
       - anomaly-ai-backend
+    networks:
+      - aa-net
+
+  # === PostgreSQL ===
+  postgres:
+    image: postgres:16-alpine
+    container_name: aa-postgres
+    environment:
+      POSTGRES_USER: anomaly
+      POSTGRES_PASSWORD: anomaly
+      POSTGRES_DB: anomaly_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U anomaly -d anomaly_ai"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - aa-net
+
+  # === Redis (кэш + rate-limit storage) ===
+  redis:
+    image: redis:7-alpine
+    container_name: aa-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - aa-net
+
+  # === Prometheus ===
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: aa-prometheus
+    volumes:
+      - ./deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    ports:
+      - "9090:9090"
+    depends_on:
+      - anomaly-ai-backend
+    networks:
+      - aa-net
+
+  # === Grafana ===
+  grafana:
+    image: grafana/grafana:11.3.0
+    container_name: aa-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./deploy/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - aa-net
+
+volumes:
+  postgres-data:
+  redis-data:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  aa-net:
+    driver: bridge

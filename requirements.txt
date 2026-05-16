@@ -1,5 +1,7 @@
-# Vercel reads this file from the repo root; its parser does not support `-r` includes.
-# Keep these lines in sync with backend/requirements.txt.
+# Vercel читает этот файл из корня репозитория; парсер не поддерживает `-r` включения.
+# Держите эти строки в синхроне с backend/requirements.txt.
+# На Vercel мы исключаем тяжёлые БД-драйверы и redis — там используется внутрь-памяти fallback.
+
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
 pydantic>=2.5.0
@@ -8,7 +10,19 @@ scikit-learn>=1.4.0
 pandas>=2.1.0
 numpy>=1.26.0
 joblib>=1.3.0
+scipy>=1.11.0
 PyYAML>=6.0.0
 python-multipart>=0.0.6
 httpx>=0.26.0
 python-dotenv>=1.0.0
+orjson>=3.9.0
+tenacity>=8.2.0
+
+# === Auth + наблюдаемость (лёгкие зависимости, работают serverless) ===
+passlib[argon2]>=1.7.4
+argon2-cffi>=23.1.0
+pyjwt[crypto]>=2.8.0
+cryptography>=42.0.0
+itsdangerous>=2.1.0
+structlog>=24.1.0
+prometheus-client>=0.20.0

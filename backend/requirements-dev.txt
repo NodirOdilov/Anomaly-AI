@@ -1,3 +1,21 @@
 -r requirements.txt
+
+# === Тестирование ===
 pytest>=7.4.0
 pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+freezegun>=1.4.0
+
+# === Линтеры и форматтеры ===
+ruff>=0.3.0
+black>=24.0.0
+mypy>=1.8.0
+types-PyYAML>=6.0.0
+
+# === Безопасность кода ===
+bandit[toml]>=1.7.6
+pip-audit>=2.7.0
+
+# === Pre-commit ===
+pre-commit>=3.6.0
