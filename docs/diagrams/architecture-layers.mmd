@@ -1,0 +1,32 @@
+flowchart LR
+    nginx["Nginx"]
+    mw["Middleware"]
+    rest["REST + WS"]
+    auth["Auth"]
+    ml["ML Services"]
+    alerts["Alerts"]
+    pg[("PostgreSQL")]
+    redis[("Redis")]
+    artifacts[("Artifacts")]
+    siem["SIEM"]
+    obs["Prometheus"]
+
+    nginx ==> mw ==> rest
+    rest --> auth & ml & alerts
+    auth --> pg & redis
+    ml --> artifacts & redis
+    ml --> alerts
+    alerts ==> siem & pg
+    rest -.-> obs
+
+    classDef edge fill:#8250df,stroke:#d2a8ff,color:#fff,stroke-width:2px
+    classDef core fill:#1f6feb,stroke:#79c0ff,color:#fff,stroke-width:2px
+    classDef dom fill:#8957e5,stroke:#d2a8ff,color:#fff,stroke-width:2px
+    classDef data fill:#9e6a03,stroke:#f0883e,color:#fff,stroke-width:2px
+    classDef out fill:#238636,stroke:#3fb950,color:#fff,stroke-width:2px
+
+    class nginx edge
+    class mw,rest core
+    class auth,ml,alerts dom
+    class pg,redis,artifacts data
+    class siem,obs out

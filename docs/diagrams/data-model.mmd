@@ -1,0 +1,43 @@
+erDiagram
+    USERS ||--o{ REFRESH_TOKENS : owns
+    USERS ||--o{ API_KEYS : owns
+    USERS ||--o{ PREDICTIONS : creates
+    USERS ||--o{ AUDIT_LOGS : performs
+    USERS ||--o{ ALERTS : acknowledges
+    PREDICTIONS ||--o| ALERTS : raises
+
+    USERS {
+        int id PK
+        string email UK
+        string hashed_password
+        enum role
+        bool is_active
+    }
+    REFRESH_TOKENS {
+        int id PK
+        int user_id FK
+        string jti UK
+        datetime expires_at
+    }
+    API_KEYS {
+        int id PK
+        int user_id FK
+        string prefix
+        string hashed_key
+    }
+    PREDICTIONS {
+        int id PK
+        string module
+        string prediction
+        float confidence
+    }
+    AUDIT_LOGS {
+        int id PK
+        string request_id
+        int status_code
+    }
+    ALERTS {
+        int id PK
+        string severity
+        enum status
+    }

@@ -1,0 +1,59 @@
+flowchart LR
+    subgraph clients["CLIENT TIER"]
+        direction TB
+        sensor["Edge Sensor"]
+        console["Analyst Console"]
+        sdk["CLI / SDK"]
+    end
+
+    nginx["Nginx"]
+
+    subgraph gateway["FASTAPI GATEWAY"]
+        direction TB
+        mw["Middleware Stack"]
+        rest["REST API"]
+        ws["WebSocket"]
+        oas["OpenAPI"]
+    end
+
+    subgraph domain["DOMAIN"]
+        direction TB
+        auth["Auth"]
+        waf["WAF"]
+        net["Network"]
+        drift["Drift"]
+        reg["Registry"]
+        ti["Threat Intel"]
+        alert["Alerts"]
+    end
+
+    subgraph storage["DATA"]
+        direction TB
+        pg[("PostgreSQL")]
+        redis[("Redis")]
+        fs[("Artifacts")]
+    end
+
+    siem["SIEM"]
+
+    sensor & console & sdk --> nginx --> mw
+    mw --> rest & ws & oas
+    rest --> auth & waf & net & drift & reg & ti
+    waf & net --> alert
+    auth --> pg & redis
+    reg --> fs
+    alert --> siem
+    alert -.-> ws
+    ws -.-> console
+
+    classDef cli fill:#0969da,stroke:#58a6ff,color:#fff
+    classDef gw fill:#1f6feb,stroke:#79c0ff,color:#fff
+    classDef svc fill:#8957e5,stroke:#d2a8ff,color:#fff
+    classDef store fill:#9e6a03,stroke:#f0883e,color:#fff
+    classDef ext fill:#da3633,stroke:#ff7b72,color:#fff
+
+    class sensor,console,sdk,nginx cli
+    class mw,rest,ws,oas gw
+    class auth,waf,net,drift,reg,ti,alert svc
+    class pg,redis,fs store
+    class siem ext

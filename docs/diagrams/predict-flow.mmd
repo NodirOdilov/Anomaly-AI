@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant N as Nginx
+    participant M as Middleware
+    participant A as Auth
+    participant W as WAF Service
+    participant R as ML Registry
+    participant D as PostgreSQL
+    participant L as Alert Manager
+    participant S as SIEM
+
+    C->>N: POST /api/v1/waf/predict
+    N->>M: HTTPS request
+    M->>M: X-Request-ID
+    M->>A: Validate JWT or API Key
+    A->>D: Lookup credentials
+    D-->>A: Principal
+    M->>W: predict(payload)
+    W->>R: Load active model
+    R-->>W: joblib pipeline
+    W->>W: TF-IDF + LogReg + rules
+    W-->>M: WafPredictResult
+    M-->>C: 200 JSON
+    M->>L: emit alert
+    par Fan-out
+        L->>S: JSON or CEF webhook
+    and
+        L-->>C: WebSocket push
+    end

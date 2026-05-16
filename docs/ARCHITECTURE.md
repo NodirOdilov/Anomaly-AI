@@ -36,58 +36,18 @@
 
 ## Высокоуровневая диаграмма
 
-```mermaid
-%%{init: {'flowchart': {'curve': 'basis', 'htmlLabels': true}, 'theme': 'dark'}}%%
-flowchart LR
-    subgraph EDGE["EDGE"]
-        nginx["Nginx<br/>TLS · HSTS · gzip"]
-    end
+<p align="center">
+  <a href="diagrams/architecture-layers.svg">
+    <img
+      src="diagrams/architecture-layers.svg"
+      alt="Anomaly AI — слои: Edge, API Core, Domain, Data, Egress"
+      width="1000"
+    />
+  </a>
+</p>
 
-    subgraph CORE["API CORE — FastAPI"]
-        mw["Middleware<br/>RequestId · Audit · RateLimit"]
-        rest["REST + WebSocket"]
-    end
-
-    subgraph DOMAIN["DOMAIN"]
-        auth["Auth"]
-        ml["ML Services"]
-        alerts["Alert Manager"]
-    end
-
-    subgraph DATA["DATA"]
-        pg[("PostgreSQL")]
-        redis[("Redis")]
-        artifacts[("Artifacts")]
-    end
-
-    subgraph OUT["EGRESS"]
-        siem["SIEM Webhooks"]
-        obs["Prometheus + Sentry"]
-    end
-
-    nginx ==> mw ==> rest
-    rest --> auth & ml & alerts
-    auth --> pg & redis
-    ml --> artifacts & redis
-    ml --> alerts
-    alerts ==> siem & pg
-    rest -. metrics .-> obs
-
-    classDef edge fill:#1e1b4b,stroke:#a78bfa,color:#ede9fe
-    classDef core fill:#0c4a6e,stroke:#38bdf8,color:#e0f2fe
-    classDef dom fill:#3b0764,stroke:#c084fc,color:#f5f3ff
-    classDef data fill:#451a03,stroke:#f97316,color:#fff7ed
-    classDef out fill:#052e16,stroke:#22c55e,color:#f0fdf4
-
-    class nginx edge
-    class mw,rest core
-    class auth,ml,alerts dom
-    class pg,redis,artifacts data
-    class siem,obs out
-```
-
-Полная детализированная диаграмма с 20+ компонентами находится в корневом
-[`README.md`](../README.md#архитектура).
+Полная схема с Clients, Gateway middleware и всеми сервисами — в корневом
+[`README.md`](../README.md#архитектура) (`diagrams/architecture-overview.svg`).
 
 ---
 
@@ -200,120 +160,29 @@ in-process кэш; следующее обращение загружает но
 
 ## Поток запроса: predict → alert → SIEM
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Client
-    participant Nginx
-    participant Mw as Middleware
-    participant Auth
-    participant WAF as WAF Service
-    participant Reg as ML Registry
-    participant Rules
-    participant DB as PostgreSQL
-    participant Alert as Alert Manager
-    participant WS as WebSocket
-    participant SIEM
-
-    Client->>Nginx: POST /api/v1/waf/predict + X-API-Key
-    Nginx->>Mw: HTTPS-запрос
-    Mw->>Mw: Generate X-Request-ID
-    Mw->>Auth: Validate API key
-    Auth->>DB: SELECT api_keys WHERE hashed_key = ?
-    DB-->>Auth: AuthPrincipal(user_id, role=analyst)
-    Auth-->>Mw: ok
-    Mw->>WAF: predict(payload)
-    WAF->>Reg: get_active("waf_payload")
-    Reg-->>WAF: artifact (joblib Pipeline)
-    WAF->>WAF: TF-IDF transform + LogReg predict_proba
-    WAF->>Rules: enrich_attack_type_ml_vs_rules(...)
-    Rules-->>WAF: attack_type=sql_injection, confidence=0.94
-    WAF-->>Mw: WafPredictResult
-    Mw->>DB: INSERT INTO predictions (...)
-    Mw-->>Client: 200 JSON + X-Request-ID
-    Note over Mw,DB: AuditLog запись (асинхронно)
-    Mw->>Alert: emit(severity=high, ...)
-    par Параллельно
-        Alert->>WS: broadcast to subscribers
-        WS-->>Client: WebSocket push (если консоль открыта)
-    and
-        Alert->>SIEM: async POST (Splunk HEC / CEF)
-        SIEM-->>Alert: 200 OK
-    end
-```
+<p align="center">
+  <a href="diagrams/predict-flow.svg">
+    <img
+      src="diagrams/predict-flow.svg"
+      alt="Sequence: WAF predict → auth → ML → alert → SIEM / WebSocket"
+      width="1000"
+    />
+  </a>
+</p>
 
 ---
 
 ## Модель данных
 
-```mermaid
-erDiagram
-    USERS ||--o{ REFRESH_TOKENS : owns
-    USERS ||--o{ API_KEYS : owns
-    USERS ||--o{ PREDICTIONS : created
-    USERS ||--o{ AUDIT_LOGS : performed
-    USERS ||--o{ ALERTS : acknowledged
-    PREDICTIONS ||--o| ALERTS : raised
-
-    USERS {
-        int id PK
-        string email UK
-        string hashed_password
-        enum role "admin/analyst/viewer"
-        bool is_active
-        datetime last_login_at
-    }
-    REFRESH_TOKENS {
-        int id PK
-        int user_id FK
-        string jti UK
-        datetime expires_at
-        datetime revoked_at
-    }
-    API_KEYS {
-        int id PK
-        int user_id FK
-        string prefix
-        string hashed_key
-        string scopes
-        datetime expires_at
-        datetime revoked_at
-    }
-    PREDICTIONS {
-        int id PK
-        int user_id FK
-        string module
-        string input_hash
-        string prediction
-        float confidence
-        bool is_attack
-        json extra_data
-    }
-    AUDIT_LOGS {
-        int id PK
-        int user_id FK
-        string action
-        string request_id
-        int status_code
-    }
-    ALERTS {
-        int id PK
-        string severity
-        string module
-        string summary
-        enum status
-        int prediction_id FK
-        int acknowledged_by FK
-    }
-    MODEL_RUNS {
-        int id PK
-        string model_type
-        string version
-        json metrics
-        float drift_score
-        enum drift_status
-    }
-```
+<p align="center">
+  <a href="diagrams/data-model.svg">
+    <img
+      src="diagrams/data-model.svg"
+      alt="ER diagram: users, tokens, api_keys, predictions, audit_logs, alerts"
+      width="1000"
+    />
+  </a>
+</p>
 
 Полные ORM-определения: [`backend/src/anomaly_ai/db/models.py`](../backend/src/anomaly_ai/db/models.py).
 

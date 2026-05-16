@@ -1,0 +1,41 @@
+flowchart TB
+    proxy["Nginx + TLS"]
+
+    subgraph front["Frontends"]
+        direction LR
+        landing["Landing SPA"]
+        console["Analyst Console"]
+    end
+
+    api["FastAPI / Uvicorn"]
+
+    subgraph backend["Platform"]
+        direction LR
+        pg[("PostgreSQL")]
+        redis[("Redis")]
+        prom["Prometheus"]
+        graf["Grafana"]
+    end
+
+    ml["ML Artifacts joblib"]
+    siem["SIEM Webhooks"]
+
+    proxy --> landing & console
+    console & landing --> api
+    api --> pg & redis & prom
+    prom --> graf
+    api --> ml
+    api --> siem
+
+    classDef edge fill:#8250df,stroke:#d2a8ff,color:#fff,stroke-width:2px
+    classDef ui fill:#0969da,stroke:#58a6ff,color:#fff,stroke-width:2px
+    classDef apiNode fill:#1f6feb,stroke:#79c0ff,color:#fff,stroke-width:2px
+    classDef data fill:#9e6a03,stroke:#f0883e,color:#fff,stroke-width:2px
+    classDef obs fill:#238636,stroke:#3fb950,color:#fff,stroke-width:2px
+
+    class proxy edge
+    class landing,console ui
+    class api apiNode
+    class pg,redis,ml data
+    class prom,graf obs
+    class siem apiNode

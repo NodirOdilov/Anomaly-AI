@@ -247,41 +247,15 @@
 
 ## 8. Архитектурная схема целевого состояния
 
-```text
-┌──────────────────────────────────────────────────────────────────────┐
-│                            Reverse Proxy (Nginx + TLS)               │
-└──────────────────────────────────────────────────────────────────────┘
-              │                          │                     │
-              ▼                          ▼                     ▼
-       ┌─────────────┐           ┌──────────────┐      ┌─────────────┐
-       │   Landing   │           │   Console    │      │  FastAPI    │
-       │  (Vite SSG) │           │   (React)    │      │  (Uvicorn)  │
-       └─────────────┘           └──────┬───────┘      └──────┬──────┘
-                                        │  WS / REST          │
-                                        └────────────►◄───────┘
-                                                     │
-                ┌────────────────────────────────────┼─────────────────────┐
-                │                                    │                     │
-                ▼                                    ▼                     ▼
-       ┌────────────────┐                 ┌──────────────────┐     ┌──────────────┐
-       │  PostgreSQL    │                 │      Redis       │     │  Prometheus  │
-       │ (users, audit, │                 │ (cache, rate,    │     │  + Grafana   │
-       │  alerts, runs) │                 │  threat intel)   │     │              │
-       └────────────────┘                 └──────────────────┘     └──────────────┘
-                │
-                ▼
-       ┌─────────────────┐
-       │  ML Artifacts   │
-       │ (joblib + meta) │
-       └─────────────────┘
-                │
-                ▼
-       ┌─────────────────┐         ┌──────────────────┐
-       │  SIEM Webhooks  │ ◄────── │  Async dispatch  │
-       │ (CEF / JSON)    │         │  (BackgroundTask │
-       └─────────────────┘         │   или arq)       │
-                                   └──────────────────┘
-```
+<p align="center">
+  <a href="diagrams/mega-plan-stack.svg">
+    <img
+      src="diagrams/mega-plan-stack.svg"
+      alt="Target stack: Nginx, Landing, Console, FastAPI, Postgres, Redis, Prometheus, ML, SIEM"
+      width="1000"
+    />
+  </a>
+</p>
 
 ---
 

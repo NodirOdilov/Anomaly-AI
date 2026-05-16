@@ -175,48 +175,41 @@ React-консоль, маркетинговый сайт и развёрнут�
 обращаются к единому защищённому API-шлюзу; за ним стоят доменные сервисы,
 персистентность, наблюдаемость и исходящие интеграции.
 
-### Обзор (читаемая схема)
-
-GitHub сжимает широкие PNG — ниже **компактная** схема слоёв (клик → увеличить).
+### Обзор платформы
 
 <p align="center">
-  <a href="docs/architecture-overview.svg">
+  <a href="docs/diagrams/architecture-overview.svg">
     <img
-      src="docs/architecture-overview.svg"
-      alt="Anomaly AI: Clients → Nginx → FastAPI → ML → Data → Alerts → SIEM"
+      src="docs/diagrams/architecture-overview.svg"
+      alt="Anomaly AI — Clients, Nginx, FastAPI Gateway, Domain, Data, Alerts, SIEM"
       width="1100"
     />
   </a>
 </p>
 
-| # | Слой | Компоненты |
-| - | ---- | ---------- |
-| 1 | Clients | Edge Sensor, Analyst Console, CLI/SDK |
-| 2 | Edge | Nginx (TLS, proxy, static) |
-| 3 | Gateway | FastAPI REST + WebSocket |
-| 4 | ML & Security | WAF, Network, Auth, Drift, Registry |
-| 5 | Persistence | PostgreSQL, Redis, joblib artifacts |
-| 6 | Alerts | pub/sub → WebSocket + SIEM |
-| 7 | Observability | structlog, Prometheus, Grafana, Sentry |
+| # | Слой | Ключевые компоненты |
+| - | ---- | ------------------- |
+| 1 | **Clients** | Edge Sensor, Analyst Console, CLI/SDK, CI automation |
+| 2 | **Edge** | Nginx — TLS/HSTS, reverse proxy, static `/console` |
+| 3 | **Gateway** | Request ID, Prometheus, CORS, Audit, Rate limit · REST · WS · OpenAPI · `/metrics` |
+| 4 | **Domain** | Auth/RBAC, WAF ML, Network ML, Drift, Registry, Threat Intel |
+| 5 | **Persistence** | PostgreSQL, Redis, versioned joblib artifacts |
+| 6 | **Alerts** | In-memory pub/sub → WebSocket + SIEM |
+| 7 | **Integrations** | SIEM (JSON/CEF), Threat Intel feeds |
+| — | **Observability** | structlog, Prometheus, Grafana, Sentry |
 
-<details>
-<summary>Подробная схема (все сервисы и связи)</summary>
+<details open>
+<summary>Компактная схема потоков (горизонтальная)</summary>
 
 <p align="center">
-  <a href="docs/architecture-diagram.png">
-    <img
-      src="docs/architecture-diagram.png"
-      alt="Anomaly AI — детальная архитектура"
-      width="920"
-    />
+  <a href="docs/diagrams/architecture-full.svg">
+    <img src="docs/diagrams/architecture-full.svg" alt="Anomaly AI — compact flow" width="1100" />
   </a>
 </p>
 
-Исходники: [`architecture-overview.mmd`](docs/architecture-overview.mmd),
-[`architecture-diagram.mmd`](docs/architecture-diagram.mmd).
-Пересборка: `npx -y @mermaid-js/mermaid-cli -c docs/mermaid-config.json -i docs/architecture-overview.mmd -o docs/architecture-overview.png -b "#0d1117" -w 1400 -s 2`
-
 </details>
+
+> Исходники диаграмм: [`docs/diagrams/`](docs/diagrams/) · пересборка: `node scripts/render-diagrams.mjs`
 
 ### Легенда диаграммы
 
