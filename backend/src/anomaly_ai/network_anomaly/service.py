@@ -9,8 +9,8 @@ from sklearn.pipeline import Pipeline
 
 from anomaly_ai.common.constants import NETWORK_LABEL_BENIGN, NETWORK_SUSPICIOUS_LABELS
 from anomaly_ai.common.exceptions import InvalidInputError
-from anomaly_ai.schemas.network import NetworkCsvResponse, NetworkPredictResponse, NetworkRowResult
 from anomaly_ai.network_anomaly.features import clean_numeric_frame
+from anomaly_ai.schemas.network import NetworkCsvResponse, NetworkPredictResponse, NetworkRowResult
 from anomaly_ai.services.prediction_history import prediction_history
 
 

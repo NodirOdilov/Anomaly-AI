@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
@@ -24,8 +24,8 @@ from anomaly_ai.db.session import get_session
 from anomaly_ai.observability.metrics import auth_logins_total
 from anomaly_ai.schemas.auth import (
     AccessTokenResponse,
-    ApiKeyCreateRequest,
     ApiKeyCreated,
+    ApiKeyCreateRequest,
     ApiKeyPublic,
     LoginRequest,
     RefreshRequest,
@@ -145,7 +145,7 @@ async def me(
             full_name=None,
             role=principal.role.value if isinstance(principal.role, UserRole) else str(principal.role),
             is_active=True,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
     return UserPublic.model_validate(user, from_attributes=True)
 
@@ -208,4 +208,4 @@ async def revoke_api_key(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={"error": "NotFound", "message": "API-ключ не найден"},
         )
-    row.revoked_at = datetime.now(timezone.utc)
+    row.revoked_at = datetime.now(UTC)

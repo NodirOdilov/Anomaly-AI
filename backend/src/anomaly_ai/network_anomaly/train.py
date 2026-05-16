@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Any
 
 import joblib
-import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from anomaly_ai.common.config import get_settings
@@ -63,7 +62,7 @@ def train_from_config(cfg: dict[str, Any], root: Path | None = None) -> Path:
     pipeline = build_network_pipeline(cfg)
     pipeline.fit(X_train, y_train)
 
-    from anomaly_ai.network_anomaly.evaluate import evaluate_multiclass_frame  # noqa: PLC0415
+    from anomaly_ai.network_anomaly.evaluate import evaluate_multiclass_frame
 
     metrics = evaluate_multiclass_frame(pipeline, X_test, y_test)
 
@@ -92,7 +91,7 @@ def main() -> None:
     parser.add_argument("--config", default="configs/network_anomaly.yaml")
     args = parser.parse_args()
 
-    from anomaly_ai.common.config import load_yaml_config  # noqa: PLC0415
+    from anomaly_ai.common.config import load_yaml_config
 
     cfg = load_yaml_config(args.config)
     out = train_from_config(cfg)

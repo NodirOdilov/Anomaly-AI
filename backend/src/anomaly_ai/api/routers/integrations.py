@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-from fastapi import APIRouter, Body, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -47,7 +47,8 @@ class SiemEndpointPublic(BaseModel):
     dependencies=[Depends(require_analyst)],
 )
 async def list_siem(session: AsyncSession = Depends(get_session)) -> list[SiemEndpointPublic]:
-    rows = (await session.execute(select(SiemEndpoint).order_by(SiemEndpoint.created_at.desc()))).scalars().all()
+    stmt = select(SiemEndpoint).order_by(SiemEndpoint.created_at.desc())
+    rows = (await session.execute(stmt)).scalars().all()
     return [SiemEndpointPublic.model_validate(r, from_attributes=True) for r in rows]
 
 
@@ -89,10 +90,10 @@ async def test_siem(
         module="test",
         severity="low",
         summary="Тестовое событие от Anomaly AI",
-        payload={"test": True, "timestamp": datetime.now(timezone.utc).isoformat()},
+        payload={"test": True, "timestamp": datetime.now(UTC).isoformat()},
     )
     if ok:
-        row.last_success_at = datetime.now(timezone.utc)
+        row.last_success_at = datetime.now(UTC)
         row.last_error = None
     else:
         row.last_error = "Не удалось отправить тестовое событие"

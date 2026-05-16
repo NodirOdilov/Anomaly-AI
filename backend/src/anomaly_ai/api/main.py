@@ -28,16 +28,6 @@ configure_structlog()
 logger = get_logger(__name__)
 
 # === Middleware и lifespan ===
-from anomaly_ai.api.lifespan import lifespan
-from anomaly_ai.api.middleware import (
-    AuditLogMiddleware,
-    app_error_handler,
-    build_limiter,
-    rate_limit_exceeded_handler,
-)
-from anomaly_ai.observability.metrics import PrometheusMiddleware, metrics_response
-from anomaly_ai.observability.request_id import RequestIdMiddleware
-
 # === v1 (совместимые) роутеры ===
 from anomaly_ai.api import (
     routes_health,
@@ -47,17 +37,38 @@ from anomaly_ai.api import (
     routes_reports,
     routes_waf,
 )
+from anomaly_ai.api.lifespan import lifespan
+from anomaly_ai.api.middleware import (
+    AuditLogMiddleware,
+    app_error_handler,
+    build_limiter,
+    rate_limit_exceeded_handler,
+)
 
 # === v2 (новые) роутеры ===
 from anomaly_ai.api.routers import (
     alerts as r_alerts,
+)
+from anomaly_ai.api.routers import (
     audit as r_audit,
+)
+from anomaly_ai.api.routers import (
     auth as r_auth,
+)
+from anomaly_ai.api.routers import (
     drift as r_drift,
+)
+from anomaly_ai.api.routers import (
     integrations as r_integrations,
+)
+from anomaly_ai.api.routers import (
     models_registry as r_models_registry,
+)
+from anomaly_ai.api.routers import (
     users as r_users,
 )
+from anomaly_ai.observability.metrics import PrometheusMiddleware, metrics_response
+from anomaly_ai.observability.request_id import RequestIdMiddleware
 from anomaly_ai.version import __version__
 
 settings = get_settings()
@@ -78,7 +89,7 @@ def _init_sentry() -> None:
             integrations=[FastApiIntegration()],
         )
         logger.info("sentry.initialized")
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning("sentry.init_failed", error=str(exc))
 
 

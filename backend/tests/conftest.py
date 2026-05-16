@@ -14,10 +14,10 @@ def _backend_cwd_and_models() -> None:
     if "PYTHONPATH" not in os.environ:
         os.environ["PYTHONPATH"] = str(BACKEND_ROOT / "src")
 
-    from anomaly_ai.api.dependencies import clear_model_caches  # noqa: PLC0415
-    from anomaly_ai.common.config import load_yaml_config  # noqa: PLC0415
-    from anomaly_ai.network_anomaly.train import train_from_config  # noqa: PLC0415
-    from anomaly_ai.waf_payload.train import train_from_config as train_waf  # noqa: PLC0415
+    from anomaly_ai.api.dependencies import clear_model_caches
+    from anomaly_ai.common.config import load_yaml_config
+    from anomaly_ai.network_anomaly.train import train_from_config
+    from anomaly_ai.waf_payload.train import train_from_config as train_waf
 
     waf_model = BACKEND_ROOT / "models" / "waf_payload_model.joblib"
     net_model = BACKEND_ROOT / "models" / "network_anomaly_model.joblib"
@@ -30,8 +30,8 @@ def _backend_cwd_and_models() -> None:
 
 @pytest.fixture
 def client():
-    from fastapi.testclient import TestClient  # noqa: PLC0415
+    from fastapi.testclient import TestClient
 
-    from anomaly_ai.api.main import app  # noqa: PLC0415
+    from anomaly_ai.api.main import app
 
     return TestClient(app)

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import DateTime, MetaData
@@ -20,7 +20,7 @@ NAMING_CONVENTION: dict[str, str] = {
 
 def utc_now() -> datetime:
     """Текущее UTC-время без микросекунд (для воспроизводимости тестов)."""
-    return datetime.now(timezone.utc).replace(microsecond=0)
+    return datetime.now(UTC).replace(microsecond=0)
 
 
 class Base(DeclarativeBase):
@@ -30,7 +30,7 @@ class Base(DeclarativeBase):
 
     # Автоматическое имя таблицы из имени класса в snake_case.
     @declared_attr.directive
-    def __tablename__(cls) -> str:  # noqa: N805
+    def __tablename__(cls) -> str:
         return _camel_to_snake(cls.__name__) + "s"
 
     def to_dict(self) -> dict[str, Any]:

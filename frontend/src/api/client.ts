@@ -15,6 +15,9 @@ export const apiClient = axios.create({
   timeout: 60_000,
 })
 
+/** Алиас для auth и admin-модулей */
+export const client = apiClient
+
 apiClient.interceptors.response.use(
   (r) => r,
   (err: AxiosError<{ error?: string; message?: string }>) => {

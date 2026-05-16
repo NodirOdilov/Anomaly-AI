@@ -16,7 +16,7 @@ CalibrationMethod = Literal["sigmoid", "isotonic"]
 
 def calibrate_classifier(
     base_estimator: Any,
-    X_calib: Any,  # noqa: N803 — научная конвенция
+    X_calib: Any,
     y_calib: Any,
     *,
     method: CalibrationMethod = "isotonic",

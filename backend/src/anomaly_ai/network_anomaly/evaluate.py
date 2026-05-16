@@ -17,7 +17,7 @@ from sklearn.pipeline import Pipeline
 
 from anomaly_ai.common.constants import NETWORK_LABEL_BENIGN
 from anomaly_ai.common.paths import backend_root, resolve_under_root
-from anomaly_ai.network_anomaly.features import clean_numeric_frame, select_feature_columns
+from anomaly_ai.network_anomaly.features import clean_numeric_frame
 
 
 def evaluate_multiclass_frame(model: Pipeline, X_test: pd.DataFrame, y_test: pd.Series) -> dict[str, float]:
@@ -60,7 +60,7 @@ def main() -> None:
     parser.add_argument("--test", required=True)
     args = parser.parse_args()
 
-    import joblib  # noqa: PLC0415
+    import joblib
 
     base = backend_root()
     model_path = Path(args.model)

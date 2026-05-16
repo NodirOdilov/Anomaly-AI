@@ -58,7 +58,7 @@ def train_from_config(cfg: dict[str, Any], root: Path | None = None) -> Path:
     pipeline = build_waf_pipeline(cfg)
     pipeline.fit(X_train, y_train)
 
-    from anomaly_ai.waf_payload.evaluate import evaluate_multiclass  # noqa: PLC0415
+    from anomaly_ai.waf_payload.evaluate import evaluate_multiclass
 
     metrics = evaluate_multiclass(pipeline, X_test, y_test)
 
@@ -87,7 +87,7 @@ def main() -> None:
     parser.add_argument("--config", default="configs/waf_payload.yaml")
     args = parser.parse_args()
 
-    from anomaly_ai.common.config import load_yaml_config  # noqa: PLC0415
+    from anomaly_ai.common.config import load_yaml_config
 
     cfg = load_yaml_config(args.config)
     out = train_from_config(cfg)

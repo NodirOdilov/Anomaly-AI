@@ -4,8 +4,13 @@ from pathlib import Path
 
 from fastapi import APIRouter
 
-from anomaly_ai.schemas.reports import ModelStatusItem, ModelsStatusResponse
-from anomaly_ai.services.artifact_loader import ModelArtifactError, ModelNotFoundError, load_network_artifact, load_waf_artifact
+from anomaly_ai.schemas.reports import ModelsStatusResponse, ModelStatusItem
+from anomaly_ai.services.artifact_loader import (
+    ModelArtifactError,
+    ModelNotFoundError,
+    load_network_artifact,
+    load_waf_artifact,
+)
 from anomaly_ai.services.model_registry import default_network_model_path, default_waf_model_path
 
 router = APIRouter(prefix="/models", tags=["models"])
@@ -13,7 +18,12 @@ router = APIRouter(prefix="/models", tags=["models"])
 
 def _status_for(path: Path, loader, model_type: str) -> ModelStatusItem:
     if not path.exists():
-        return ModelStatusItem(loaded=False, model_type=model_type, path=str(path), message="Артефакт не найден")
+        return ModelStatusItem(
+            loaded=False,
+            model_type=model_type,
+            path=str(path),
+            message="Артефакт не найден",
+        )
     try:
         art = loader(path)
         return ModelStatusItem(

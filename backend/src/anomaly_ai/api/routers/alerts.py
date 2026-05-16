@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect, status
 from sqlalchemy import func, select
@@ -13,8 +13,8 @@ from anomaly_ai.auth.dependencies import AuthPrincipal, get_current_principal
 from anomaly_ai.auth.jwt import JwtError, decode_token
 from anomaly_ai.auth.rbac import require_analyst
 from anomaly_ai.common.config import get_settings
-from anomaly_ai.db.models import Alert, AlertStatus, User
-from anomaly_ai.db.session import get_session, session_scope
+from anomaly_ai.db.models import Alert, AlertStatus
+from anomaly_ai.db.session import get_session
 from anomaly_ai.integrations.alert_manager import alert_manager
 from anomaly_ai.schemas.admin import AlertAckRequest, AlertPublic, PaginationMeta
 
@@ -71,7 +71,7 @@ async def acknowledge_alert(
     alert.status = AlertStatus(body.status)
     alert.notes = body.notes
     alert.acknowledged_by = principal.user_id or None
-    alert.acknowledged_at = datetime.now(timezone.utc)
+    alert.acknowledged_at = datetime.now(UTC)
     return AlertPublic.model_validate(alert, from_attributes=True)
 
 

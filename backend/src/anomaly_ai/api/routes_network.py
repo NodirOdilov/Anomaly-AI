@@ -8,8 +8,8 @@ from fastapi import APIRouter, Depends, File, UploadFile
 
 from anomaly_ai.api.dependencies import get_network_service
 from anomaly_ai.common.exceptions import InvalidInputError
-from anomaly_ai.schemas.network import NetworkCsvResponse, NetworkPredictResponse
 from anomaly_ai.network_anomaly.service import NetworkAnomalyService
+from anomaly_ai.schemas.network import NetworkCsvResponse, NetworkPredictResponse
 
 router = APIRouter(prefix="/network", tags=["network"])
 
@@ -38,7 +38,7 @@ async def upload_network_csv(
         raise InvalidInputError("CSV должен быть в кодировке UTF-8") from exc
     try:
         df = pd.read_csv(io.StringIO(text))
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         raise InvalidInputError(f"Некорректный CSV: {exc}") from exc
     if df.empty:
         raise InvalidInputError("CSV не содержит строк")
@@ -46,5 +46,5 @@ async def upload_network_csv(
         return service.predict_csv(df, label_column="Label")
     except InvalidInputError:
         raise
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         raise InvalidInputError(f"Не удалось выполнить оценку CSV: {exc}") from exc

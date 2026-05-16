@@ -6,7 +6,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -62,7 +62,7 @@ async def authenticate(session: AsyncSession, *, email: str, password: str) -> U
     if not verify_password(password, user.hashed_password):
         raise AuthError("Неверный email или пароль")
 
-    user.last_login_at = datetime.now(timezone.utc)
+    user.last_login_at = datetime.now(UTC)
     return user
 
 
@@ -133,7 +133,7 @@ async def revoke_refresh_token(session: AsyncSession, *, jti: str) -> None:
     stored = result.scalar_one_or_none()
     if stored is None or stored.revoked_at is not None:
         return
-    stored.revoked_at = datetime.now(timezone.utc)
+    stored.revoked_at = datetime.now(UTC)
 
 
 __all__ = [

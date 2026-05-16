@@ -56,8 +56,8 @@ def main() -> None:
     parser.add_argument("--test", required=True, help="CSV with payload,label")
     args = parser.parse_args()
 
-    import joblib  # noqa: PLC0415
-    import pandas as pd  # noqa: PLC0415
+    import joblib
+    import pandas as pd
 
     base = backend_root()
     model_path = Path(args.model)

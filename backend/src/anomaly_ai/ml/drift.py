@@ -15,15 +15,15 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass, field
-from typing import Iterable, Literal, Sequence
+from typing import Literal
 
 import numpy as np
 import pandas as pd
 from scipy import stats
 
 from anomaly_ai.common.config import get_settings
-
 
 DriftLevel = Literal["stable", "warning", "critical"]
 

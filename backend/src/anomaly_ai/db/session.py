@@ -48,7 +48,7 @@ def create_engine() -> AsyncEngine:
     return _engine
 
 
-def AsyncSessionLocal() -> AsyncSession:  # noqa: N802 — фабричная функция-конвенция
+def AsyncSessionLocal() -> AsyncSession:
     """Создать новую сессию (нужно вручную закрывать)."""
     if _session_factory is None:
         create_engine()

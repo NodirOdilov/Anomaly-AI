@@ -54,10 +54,18 @@ ignore = [
     "S101",   # assert разрешён в тестах
     "S104",   # 0.0.0.0 разрешён (контейнер)
     "B008",   # FastAPI Depends() в дефолтах
+    "RUF001", # кириллица в строках (сообщения API на русском)
+    "RUF002", # кириллица в docstring (русскоязычный проект)
+    "RUF003", # кириллица в комментариях (русскоязычный проект)
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S", "PT"]
+"src/anomaly_ai/api/main.py" = ["E402"]
+"src/anomaly_ai/api/routers/**" = ["PT028"]
+"src/anomaly_ai/schemas/auth.py" = ["S105"]
+"src/anomaly_ai/api/middleware/audit.py" = ["RUF006"]
+"src/anomaly_ai/integrations/alert_manager.py" = ["RUF006"]
 
 # === Mypy ===
 [tool.mypy]

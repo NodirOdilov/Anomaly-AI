@@ -48,7 +48,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
                 # В dev — авто-создание таблиц для удобства (без Alembic).
                 await init_db()
             await _bootstrap_admin()
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             logger.warning("lifespan.db_init_skipped", error=str(exc))
 
     logger.info("app.started", env=settings.app_env, version=settings.app_version)

@@ -40,7 +40,7 @@ async def readiness() -> dict:
             async with AsyncSessionLocal() as session:
                 await session.execute(text("SELECT 1"))
             db_ok = True
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             db_error = str(exc)
     else:
         db_ok = True

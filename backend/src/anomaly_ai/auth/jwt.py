@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import secrets
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 
 import jwt
@@ -33,7 +33,7 @@ class JwtClaims:
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _encode(payload: dict[str, Any]) -> str:
@@ -102,8 +102,8 @@ def decode_token(token: str, expected_type: TokenType | None = None) -> JwtClaim
         role=str(raw.get("role", "viewer")),
         type=token_type,  # type: ignore[arg-type]
         jti=str(raw.get("jti", "")),
-        issued_at=datetime.fromtimestamp(int(raw["iat"]), tz=timezone.utc),
-        expires_at=datetime.fromtimestamp(int(raw["exp"]), tz=timezone.utc),
+        issued_at=datetime.fromtimestamp(int(raw["iat"]), tz=UTC),
+        expires_at=datetime.fromtimestamp(int(raw["exp"]), tz=UTC),
         extra=extra,
     )
 

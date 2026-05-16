@@ -55,17 +55,18 @@ def explain_linear_text(
         return []
 
     # Выбор строки коэффициентов для нужного класса.
-    if class_label is not None and class_label in classes:
-        class_idx = list(classes).index(class_label)
-    else:
-        class_idx = 0
+    class_idx = (
+        list(classes).index(class_label)
+        if class_label is not None and class_label in classes
+        else 0
+    )
     row = coefs[class_idx] if coefs.ndim > 1 else coefs
 
     # Активные индексы в текущем документе.
     indices = vec.indices
     values = vec.data
     contributions = values * row[indices]
-    pairs = list(zip(feature_names[indices], contributions))
+    pairs = list(zip(feature_names[indices], contributions, strict=True))
     pairs.sort(key=lambda kv: abs(kv[1]), reverse=True)
     return [FeatureContribution(name=str(n), weight=float(w)) for n, w in pairs[:top_n]]
 
@@ -90,7 +91,7 @@ def explain_tree_tabular(
     importances = getattr(classifier, "feature_importances_", None)
     if importances is None:
         return []
-    pairs = list(zip(feature_names, importances))
+    pairs = list(zip(feature_names, importances, strict=True))
     pairs.sort(key=lambda kv: kv[1], reverse=True)
     return [FeatureContribution(name=str(n), weight=float(w)) for n, w in pairs[:top_n]]
 

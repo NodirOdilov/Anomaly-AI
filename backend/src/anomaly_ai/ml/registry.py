@@ -22,8 +22,8 @@ from __future__ import annotations
 
 import json
 import threading
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -135,7 +135,7 @@ class ModelRegistry:
             if artifact_bytes is not None:
                 (version_dir / ARTIFACT_NAME).write_bytes(artifact_bytes)
             meta = dict(metadata or {})
-            meta.setdefault("registered_at", datetime.now(timezone.utc).isoformat())
+            meta.setdefault("registered_at", datetime.now(UTC).isoformat())
             (version_dir / METADATA_NAME).write_text(
                 json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8",
             )

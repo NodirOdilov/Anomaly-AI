@@ -8,9 +8,9 @@ from __future__ import annotations
 
 import csv
 import io
+from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import datetime, timezone
-from typing import Iterable
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -38,7 +38,7 @@ class ThreatIntelService:
 
     async def lookup(self, *, indicator: str, indicator_type: str) -> ThreatVerdict:
         """Проверить один индикатор."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         stmt = select(ThreatIntelEntry).where(
             ThreatIntelEntry.indicator == indicator,
             ThreatIntelEntry.indicator_type == indicator_type,

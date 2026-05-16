@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import secrets
 from functools import lru_cache
-from pathlib import Path
 from typing import Any, Literal
 
 import yaml
@@ -144,7 +143,9 @@ class Settings(BaseSettings):
     def is_serverless(self) -> bool:
         """На Vercel/Lambda некоторые подсистемы отключаются."""
         import os
-        return os.getenv("VERCEL", "").lower() in {"1", "true"} or os.getenv("AWS_LAMBDA_FUNCTION_NAME") is not None
+        on_vercel = os.getenv("VERCEL", "").lower() in {"1", "true"}
+        on_lambda = os.getenv("AWS_LAMBDA_FUNCTION_NAME") is not None
+        return on_vercel or on_lambda
 
 
 @lru_cache

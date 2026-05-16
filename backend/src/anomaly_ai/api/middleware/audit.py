@@ -58,7 +58,7 @@ class AuditLogMiddleware(BaseHTTPMiddleware):
             )
             async with session_scope() as session:
                 session.add(entry)
-        except Exception as exc:  # noqa: BLE001 — best-effort
+        except Exception as exc:
             logger.warning("audit.write_failed", error=str(exc))
 
 
@@ -84,4 +84,4 @@ with contextlib.suppress(ImportError):
     pass
 
 
-__all__ = ["AuditLogMiddleware", "SKIP_PATHS", "safe_audit_path"]
+__all__ = ["SKIP_PATHS", "AuditLogMiddleware", "safe_audit_path"]

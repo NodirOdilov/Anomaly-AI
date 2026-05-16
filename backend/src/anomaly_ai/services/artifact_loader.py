@@ -31,7 +31,7 @@ def load_artifact(path: Path, expected_type: str) -> dict[str, Any]:
         raise ModelNotFoundError(f"Model artifact not found: {path}")
     try:
         data = joblib.load(path)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         raise ModelArtifactError(f"Failed to load artifact: {exc}") from exc
     if not isinstance(data, dict):
         raise ModelArtifactError("Artifact file must contain a dict bundle")

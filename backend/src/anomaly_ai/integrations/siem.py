@@ -8,7 +8,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any, Literal
 
 import httpx
@@ -41,7 +41,7 @@ def build_json_event(
 ) -> dict[str, Any]:
     """Сформировать JSON-событие для Splunk HEC / ELK."""
     return {
-        "time": datetime.now(timezone.utc).isoformat(),
+        "time": datetime.now(UTC).isoformat(),
         "source": "anomaly-ai",
         "sourcetype": f"anomaly_ai:{module}",
         "event": {
@@ -162,7 +162,7 @@ class SiemDispatcher:
                             attempts=attempt.retry_state.attempt_number,
                         )
                         return True
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             logger.error("siem.send_failed", module=module, error=str(exc))
             return False
         return False

@@ -13,7 +13,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -72,7 +72,7 @@ async def _resolve_api_key(raw_key: str, session: AsyncSession) -> AuthPrincipal
     if api_key is None:
         raise _unauthorized("Невалидный API-ключ")
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     if api_key.revoked_at is not None:
         raise _unauthorized("API-ключ отозван")
     if api_key.expires_at is not None and api_key.expires_at < now:
