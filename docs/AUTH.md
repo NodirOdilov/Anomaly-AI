@@ -1,6 +1,23 @@
 # Аутентификация и авторизация
 
-> Модель безопасности Anomaly AI v2.
+> Модель безопасности Anomaly AI v2: JWT, API-ключи, RBAC.
+
+| Параметр | Значение |
+|----------|----------|
+| Роли | `viewer`, `analyst`, `admin` |
+| Dev по умолчанию | `AUTH_REQUIRED=false` |
+| Репозиторий | [NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI) |
+
+## Содержание
+
+1. [Обзор](#обзор)
+2. [Конфигурация](#конфигурация)
+3. [Хэширование паролей](#хэширование-паролей)
+4. [Эндпоинты](#эндпоинты)
+5. [API-ключи](#api-ключи)
+6. [Безопасные значения по умолчанию](#безопасные-значения-по-умолчанию)
+
+---
 
 ## Обзор
 
@@ -137,7 +154,8 @@ DELETE /api/v1/auth/api-keys/{id}
 - WebSocket принимает JWT в query-параметре `?token=...` (стандарт ограничения
   WebSocket-клиентов). Используйте `wss://` для шифрования.
 
-## Связано
+## См. также
 
-- [[MONITORING]] — метрики auth_logins_total
-- [[SECURITY]] — общая модель угроз
+- [`MONITORING.md`](MONITORING.md) — метрика `anomaly_ai_auth_logins_total`
+- [`SECURITY.md`](../SECURITY.md) — политика безопасности
+- [`API.md`](API.md) — эндпоинты auth

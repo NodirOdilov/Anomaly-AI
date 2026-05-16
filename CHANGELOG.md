@@ -1,8 +1,19 @@
 # Журнал изменений
 
-Все значимые изменения проекта документируются в этом файле.
-Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
-версионирование: [SemVer](https://semver.org/lang/ru/).
+> Все значимые изменения Anomaly AI. Формат [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии [SemVer](https://semver.org/lang/ru/).
+
+| Параметр | Значение |
+|----------|----------|
+| Текущий релиз | 2.0.0 |
+| Не выпущено | `[Unreleased]` |
+| Репозиторий | [NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI) |
+
+## Содержание
+
+- [Unreleased](#unreleased)
+- [2.0.0 — 2026-05-16](#200--2026-05-16)
+
+---
 
 ## [Unreleased]
 

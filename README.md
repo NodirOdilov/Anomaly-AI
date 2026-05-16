@@ -579,25 +579,43 @@ Anomaly AI предназначен **исключительно** для защ
 
 ## Документация
 
-Полная документация находится в каталоге [`docs/`](docs/) и состоит из тематических документов:
+Каталог [`docs/`](docs/) — техническая документация. Корень репозитория — политики и журнал изменений.
 
-| Документ                                          | Содержание                                                    |
-| ------------------------------------------------- | ------------------------------------------------------------- |
-| [`MEGA_PLAN.md`](docs/MEGA_PLAN.md)               | Master-план эволюции платформы (6 фаз)                        |
-| [`ARCHITECTURE.md`](docs/ARCHITECTURE.md)         | Архитектурные слои и потоки данных                            |
-| [`API.md`](docs/API.md)                           | Полная справка по REST-эндпоинтам                             |
-| [`AUTH.md`](docs/AUTH.md)                         | Модель безопасности: JWT, API-ключи, RBAC                     |
-| [`MONITORING.md`](docs/MONITORING.md)             | Prometheus-метрики, Grafana, structlog                        |
-| [`INTEGRATION.md`](docs/INTEGRATION.md)           | SIEM (JSON/CEF) и Threat Intelligence                         |
-| [`DRIFT.md`](docs/DRIFT.md)                       | Детектор дрейфа: PSI, KS, Chi-squared                         |
-| [`DATASETS.md`](docs/DATASETS.md)                 | Форматы данных, демонстрационные выборки и их ограничения     |
-| [`MODEL_CARD.md`](docs/MODEL_CARD.md)             | Назначение моделей, ограничения, этика                        |
-| [`DEPLOYMENT.md`](docs/DEPLOYMENT.md)             | Сценарии локального, контейнерного и serverless-запуска       |
-| [`ROADMAP.md`](docs/ROADMAP.md)                   | Дорожная карта релизов                                        |
-| [`CHANGELOG.md`](CHANGELOG.md)                    | История изменений в формате Keep a Changelog                  |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md)              | Гайдлайны разработки                                          |
-| [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)        | Contributor Covenant 2.1                                      |
-| [`SECURITY.md`](SECURITY.md)                      | Модель угроз и политика disclosure                            |
+### Архитектура и планирование
+
+| Документ | Содержание |
+|----------|------------|
+| [`MEGA_PLAN.md`](docs/MEGA_PLAN.md) | Master-план (6 фаз) |
+| [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Слои, потоки, отказоустойчивость |
+| [`diagrams/`](docs/diagrams/) | Mermaid и SVG-диаграммы |
+| [`ROADMAP.md`](docs/ROADMAP.md) | Дорожная карта релизов |
+
+### API, данные и ML
+
+| Документ | Содержание |
+|----------|------------|
+| [`API.md`](docs/API.md) | REST-эндпоинты |
+| [`AUTH.md`](docs/AUTH.md) | JWT, API keys, RBAC |
+| [`DATASETS.md`](docs/DATASETS.md) | Форматы и образцы |
+| [`MODEL_CARD.md`](docs/MODEL_CARD.md) | Этика и ограничения моделей |
+| [`DRIFT.md`](docs/DRIFT.md) | PSI, KS, мониторинг дрейфа |
+
+### Эксплуатация
+
+| Документ | Содержание |
+|----------|------------|
+| [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Local, Docker, Vercel |
+| [`MONITORING.md`](docs/MONITORING.md) | Prometheus, Grafana, логи |
+| [`INTEGRATION.md`](docs/INTEGRATION.md) | SIEM, Threat Intelligence |
+
+### Сообщество
+
+| Документ | Содержание |
+|----------|------------|
+| [`CHANGELOG.md`](CHANGELOG.md) | История изменений |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Гайд для контрибьюторов |
+| [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) | Кодекс поведения |
+| [`SECURITY.md`](SECURITY.md) | Политика безопасности |
 
 ---
 

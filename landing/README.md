@@ -1,36 +1,76 @@
-# Anomaly AI — маркетинговый лендинг
+# Landing — Anomaly AI
 
-Отдельная премиальная посадочная страница для посетителей и стейкхолдеров. Стек: **Vite + React + TypeScript + Tailwind v4 + Framer Motion**.
+> Маркетинговый сайт и встроенная техническая документация (`/docs`).
+
+| Параметр | Значение |
+|----------|----------|
+| Стек | Vite, React, TypeScript, Tailwind 4, Framer Motion |
+| Порт (dev) | `5174` |
+| Репозиторий | [NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI) |
+
+## Содержание
+
+1. [Разработка](#разработка)
+2. [Переменные окружения](#переменные-окружения)
+3. [Сборка и деплой](#сборка-и-деплой)
+4. [Документация в приложении](#документация-в-приложении)
+
+---
 
 ## Разработка
 
 ```bash
 cd landing
 npm install
+cp .env.example .env
 npm run dev
 ```
 
-По умолчанию: **http://localhost:5174** (консоль аналитика — 5173).
+| Сервис | URL (локально) |
+|--------|----------------|
+| Landing | `http://localhost:5174` |
+| Консоль | `http://localhost:5173` |
+| API | `http://localhost:8000` |
 
-## Настройка CTA
+---
 
-Скопируйте `.env.example` → `.env`:
+## Переменные окружения
 
-- `VITE_DASHBOARD_URL` — React-консоль (по умолчанию `http://localhost:5173`)
-- `VITE_API_URL` — базовый URL FastAPI (по умолчанию `http://localhost:8000`)
-- `VITE_REPO_URL` — корень GitHub (по умолчанию `https://github.com/NodirOdilov/Anomaly-AI`)
+Скопируйте `.env.example` в `.env`:
 
-## Сборка
+| Переменная | Назначение | По умолчанию |
+|------------|------------|--------------|
+| `VITE_DASHBOARD_URL` | Ссылка на консоль | `http://localhost:5173` |
+| `VITE_API_URL` | FastAPI | `http://localhost:8000` |
+| `VITE_REPO_URL` | GitHub (CTA, docs) | `https://github.com/NodirOdilov/Anomaly-AI` |
+
+---
+
+## Сборка и деплой
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Статика в `dist/` — деплой на любой CDN или static-хостинг.
+Выход: `dist/` — любой static-хостинг или CDN.
 
-## Научная документация (в приложении)
+Для SPA настройте fallback всех путей на `index.html` (нужно для `/docs/...`).
 
-На сайте есть полное **русскоязычное** техническое руководство для исследователей: **http://localhost:5174/docs** (или ваш origin + `/docs`). Кнопка CTA *Документация API* ведёт туда.
+---
 
-Для SPA настройте fallback всех путей на `index.html` (нужно для прямых заходов на `/docs/...`).
+## Документация в приложении
+
+| Раздел | URL |
+|--------|-----|
+| Техническое руководство (RU) | `http://localhost:5174/docs` |
+| API в репозитории | `docs/API.md` на GitHub |
+
+Кнопка CTA «Документация» ведёт на `/docs`.
+
+---
+
+## См. также
+
+- [`frontend/README.md`](../frontend/README.md)
+- [`docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md)

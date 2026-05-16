@@ -1,5 +1,23 @@
 # Развёртывание
 
+> Сценарии запуска: локальная разработка, Docker Compose, Vercel (демо), production-заметки.
+
+| Параметр | Значение |
+|----------|----------|
+| Compose | корневой `docker-compose.yml` |
+| Backend env | `backend/.env.example` |
+| Репозиторий | [NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI) |
+
+## Содержание
+
+1. [Локальная разработка](#локальная-разработка)
+2. [Docker Compose](#docker-compose)
+3. [Переменные окружения](#переменные-окружения)
+4. [Vercel (один проект)](#vercel-один-проект)
+5. [Production-заметки](#production-заметки)
+
+---
+
 ## Локальная разработка
 
 ### Бэкенд
@@ -7,38 +25,54 @@
 ```bash
 cd backend
 python -m venv .venv
-# активировать venv (зависит от ОС)
+# активировать venv
 pip install -r requirements-dev.txt
-set PYTHONPATH=src   # PowerShell: $env:PYTHONPATH="src"
+```
+
+**PowerShell:** `$env:PYTHONPATH = "src"`  
+**bash:** `export PYTHONPATH=src`
+
+```bash
 python -m pytest
 uvicorn anomaly_ai.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### Маркетинговый лендинг
+| Сервис | URL |
+|--------|-----|
+| API | `http://localhost:8000` |
+| Swagger | `http://localhost:8000/api/swagger` |
+
+### Landing
 
 ```bash
 cd landing
 npm install
+cp .env.example .env
 npm run dev
 ```
 
-По умолчанию порт **5174**. Настройте `landing/.env` из `landing/.env.example` для ссылок на консоль/API/репозиторий в CTA.
+Порт по умолчанию: **5174**. CTA-ссылки — из `landing/.env`.
 
-### Фронтенд (аналитическая консоль)
+### Frontend (консоль)
 
 ```bash
 cd frontend
 npm install
+cp .env.example .env
 npm run dev
 ```
 
-Файл `frontend/.env`:
+`frontend/.env`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-## Docker Compose (демо)
+Порт: **5173**.
+
+---
+
+## Docker Compose
 
 Из корня репозитория:
 
@@ -46,46 +80,81 @@ VITE_API_BASE_URL=http://localhost:8000
 docker compose up --build
 ```
 
-- Backend слушает `8000`.
-- Dev-сервер frontend — `5173`.
-- Браузер по-прежнему обращается к API по `http://localhost:8000` (сеть хоста).
+| Сервис | Порт (хост) |
+|--------|-------------|
+| API | 8000 |
+| Frontend dev | 5173 |
+| Postgres | 5432 |
+| Redis | 6379 |
+| Prometheus | 9090 |
+| Grafana | 3000 |
+
+Браузер обращается к API по `http://localhost:8000`.
+
+---
 
 ## Переменные окружения
 
 ### Бэкенд (`backend/.env.example`)
 
-- `APP_ENV`, `APP_NAME`, `APP_VERSION`
-- `MODEL_DIR` (по умолчанию `models`)
-- `DATA_DIR` (по умолчанию `data`)
+| Группа | Ключи (примеры) |
+|--------|-----------------|
+| Приложение | `APP_ENV`, `APP_NAME`, `APP_VERSION` |
+| Пути | `MODEL_DIR`, `DATA_DIR` |
+| БД | `DATABASE_URL` |
+| Auth | `AUTH_REQUIRED`, `JWT_SECRET`, `BOOTSTRAP_ADMIN_*` |
+| SIEM | `SIEM_WEBHOOK_*` |
+| Наблюдаемость | `LOG_JSON`, `SENTRY_DSN` |
 
-### Фронтенд (`frontend/.env.example`)
+Полный список — в файле `.env.example`.
 
-- `VITE_API_BASE_URL`
+### Frontend
+
+| Переменная | Назначение |
+|------------|------------|
+| `VITE_API_BASE_URL` | URL FastAPI |
+
+---
 
 ## Vercel (один проект)
 
-В корне репозитория подготовлена конфигурация для Vercel:
+| Файл | Назначение |
+|------|------------|
+| `vercel.json` | build, rewrites `/docs/*`, `/console/*`, Python function |
+| `api/index.py` | Экспорт FastAPI (`BACKEND_ROOT=./backend`) |
+| `requirements.txt` | Зависимости backend (корень, для парсера Vercel) |
+| `scripts/vercel-build.mjs` | Сборка landing → `public/`, frontend → `public/console/` |
 
-- `vercel.json` — `framework: null` (пресет Other), `installCommand` (использует **`uv pip install --system`**, т. к. на Vercel PEP 668 / uv-managed Python обычный `pip install` может падать), `buildCommand`, SPA-rewrite для `/docs/*` и `/console/*`, длительность Python-функции.
-- `api/index.py` — задаёт `BACKEND_ROOT` в `./backend`, расширяет `PYTHONPATH`, экспортирует FastAPI `app` (нужен в `api/`, чтобы glob `functions` в `vercel.json` совпадал; Vercel CLI 51+ не принимает корневой `server.py` в `functions`).
-- Корневой `requirements.txt` — копия `backend/requirements.txt` (парсер Vercel не поддерживает `-r` из другого файла).
-- `scripts/vercel-build.mjs` — собирает `landing/` в `public/` и `frontend/` в `public/console/` (`VITE_BASE=/console/`). Папка `public/` — артефакт сборки, может быть в `.gitignore` локально; на Vercel генерируется при build и отдаётся с CDN.
-
-**Импорт с GitHub:** подключите репозиторий и деплойте с настройками по умолчанию. Root directory — корень репозитория; для CORS отдельные env не нужны (при `VERCEL` API использует открытый CORS без cookies, как SPA-клиенты).
-
-Если UI Vercel предлагает **«Services»** / `experimentalServices`, предпочтите **Other** (один проект) с корнем **`.`**: репозиторий опирается на **`public/`** для лендинга и SPA на CDN, а Python-обработчик (`api/index.py`) — только для путей API. FastAPI с `routePrefix: "/"` через `experimentalServices` отправляет **все** запросы (включая `/`) в Python, где нет маршрута `GET /`, и сайт отвечает `{"detail":"Not Found"}`. Для `maxDuration` используйте **`functions`** с **`api/index.py`**, не корневой `server.py`.
+**Импорт:** root = `.`, framework **Other** (не experimentalServices для всего трафика — иначе `GET /` уйдёт в Python без маршрута).
 
 После деплоя:
 
-- Маркетинг: `/`
-- Встроенная документация (landing SPA): `/docs/*`
-- Аналитическая консоль: `/console/*`
-- API: `/health`, `/api/v1/*`
-- Swagger UI: `/api/swagger` (маркетинговый путь `/docs` зарезервирован под React-документацию)
+| Путь | Назначение |
+|------|------------|
+| `/` | Landing |
+| `/docs/*` | Встроенная документация (SPA) |
+| `/console/*` | Аналитическая консоль |
+| `/health`, `/api/v1/*` | API |
+| `/api/swagger` | OpenAPI (не путать с `/docs` SPA) |
 
-Действуют лимиты serverless (cold start, duration, размер бандла); тяжёлый ML лучше на Docker или выделенном API-хосте.
+Ограничения serverless: cold start, duration, размер бандла. Тяжёлый ML — Docker или выделенный API-хост.
 
-## Замечания
+---
 
-- Смонтируйте `backend/models` и `backend/data` как volumes, если нужны постоянные артефакты и датасеты в контейнерах.
-- В production обычно отдают собранный Vite `dist/` за reverse proxy, а не dev-сервер.
+## Production-заметки
+
+| Тема | Рекомендация |
+|------|--------------|
+| Статика | Собранный Vite `dist/` за reverse proxy, не dev-сервер |
+| Модели и данные | Volume на `backend/models`, `backend/data` |
+| Секреты | `JWT_SECRET`, пароли БД — только через secret manager |
+| Auth | `AUTH_REQUIRED=true` |
+| Мониторинг | [`MONITORING.md`](MONITORING.md) |
+
+---
+
+## См. также
+
+- [`AUTH.md`](AUTH.md)
+- [`../docker-compose.yml`](../docker-compose.yml)
+- [`../backend/README.md`](../backend/README.md)

@@ -1,6 +1,26 @@
 # Anomaly AI v2.0 — MEGA-план эволюции платформы
 
-> Этот документ описывает превращение учебно-портфолиоьного MVP в **production-grade ML-платформу обнаружения киберугроз**. План разбит на 6 фаз; каждая фаза самодостаточна и может быть выпущена как минорная версия.
+> Превращение MVP в **production-grade ML-платформу** обнаружения киберугроз. Шесть фаз; каждая — самодостаточный релиз.
+
+| Параметр | Значение |
+|----------|----------|
+| Целевая версия | 2.0.0 (реализовано) |
+| Диаграмма стека | [`diagrams/mega-plan-stack.svg`](diagrams/mega-plan-stack.svg) |
+| Автор | [Nodir Odilov](https://github.com/NodirOdilov) |
+| Репозиторий | [NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI) |
+
+## Содержание
+
+1. [Контекст и цели](#0-контекст-и-цели)
+2. [Фаза 1 — Фундамент](#1-фаза-1--фундамент-v15)
+3. [Фаза 2 — ML](#2-фаза-2--ml-на-стероидах-v16)
+4. [Фаза 3 — API](#3-фаза-3--расширение-api-v17)
+5. [Фаза 4 — UX](#4-фаза-4--production-ux-v18)
+6. [Фаза 5 — DevOps](#5-фаза-5--devops-и-безопасность-кода-v19)
+7. [Фаза 6 — Документация](#6-фаза-6--документация-и-сообщество-v20)
+8. [Текущая сессия](#7-приоритеты-текущей-сессии-что-реализовано-сейчас)
+9. [Целевая схема](#8-архитектурная-схема-целевого-состояния)
+10. [Миграция и метрики успеха](#9-совместимость-и-миграция)
 
 ---
 
@@ -236,12 +256,12 @@
 
 | Фаза | Статус | Артефакты |
 |---|---|---|
-| 1. Фундамент | ✅ Реализовано | `db/`, `auth/`, `observability/`, новый `Settings`, миграции, тесты |
-| 2. ML | ✅ Реализовано | `ml/registry.py`, `ml/drift.py`, `network_anomaly/isolation_forest.py`, `ml/explain.py` |
-| 3. API | ✅ Реализовано | роутеры `auth`, `users`, `audit`, `alerts` (WS), `integrations`, `drift`, `jobs` |
-| 4. Frontend | 🟡 Скелет | страницы `login`, `admin/audit`, `admin/users`, `useAuth`, `useAlertsStream`, переключатель тем |
-| 5. DevOps | 🟡 Скелет | multi-stage Dockerfile, расширенный docker-compose, pre-commit, обновлённые CI |
-| 6. Документация | ✅ Реализовано | `AUTH.md`, `MONITORING.md`, `INTEGRATION.md`, `DRIFT.md`, `CHANGELOG.md`, `CONTRIBUTING.md` |
+| 1. Фундамент | Готово | `db/`, `auth/`, `observability/`, новый `Settings`, миграции, тесты |
+| 2. ML | Готово | `ml/registry.py`, `ml/drift.py`, `network_anomaly/isolation_forest.py`, `ml/explain.py` |
+| 3. API | Готово | роутеры `auth`, `users`, `audit`, `alerts` (WS), `integrations`, `drift`, `jobs` |
+| 4. Frontend | Частично | страницы `login`, `admin/audit`, `useAuth`, `useAlertsStream`, переключатель тем |
+| 5. DevOps | Частично | multi-stage Dockerfile, docker-compose, pre-commit, CI |
+| 6. Документация | Готово | `AUTH.md`, `MONITORING.md`, `INTEGRATION.md`, `DRIFT.md`, `CHANGELOG.md`, `CONTRIBUTING.md` |
 
 ---
 

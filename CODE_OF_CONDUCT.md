@@ -1,5 +1,22 @@
 # Кодекс поведения участников
 
+> Правила взаимодействия в сообществе Anomaly AI. Адаптация [Contributor Covenant 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+
+| Параметр | Значение |
+|----------|----------|
+| Основа | Contributor Covenant 2.1 |
+| Эскалация | [`SECURITY.md`](SECURITY.md), GitHub Issues |
+| Репозиторий | [NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI) |
+
+## Содержание
+
+1. [Наша клятва](#наша-клятва)
+2. [Стандарты](#стандарты)
+3. [Применение](#применение)
+4. [Источник](#источник)
+
+---
+
 ## Наша клятва
 
 Мы, как участники, контрибьюторы и руководители проекта, обязуемся сделать
