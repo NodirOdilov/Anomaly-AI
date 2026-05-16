@@ -1,28 +1,28 @@
-# Datasets
+# Датасеты
 
-## Expectations
+## Ожидания
 
-### WAF payload data
+### Данные WAF payload
 
-- **Format**: JSON array of `{ "payload": "...", "label": "..." }` or CSV with `payload,label`.
-- **Labels** (demo): `benign`, `sql_injection`, `xss`, `path_traversal`, `command_injection`, `generic_injection`.
-- **Location (sample)**: `backend/data/samples/sample_payloads.json` and `sample_payloads.csv`.
+- **Формат**: JSON-массив `{ "payload": "...", "label": "..." }` или CSV `payload,label`.
+- **Метки** (демо): `benign`, `sql_injection`, `xss`, `path_traversal`, `command_injection`, `generic_injection`.
+- **Расположение (образец)**: `backend/data/samples/sample_payloads.json` и `sample_payloads.csv`.
 
-These samples are **tiny** and only validate the training/inference plumbing.
+Образцы **крошечные** и только проверяют конвейер обучения/инференса.
 
-### Network flow data
+### Данные сетевых потоков
 
-- **Format**: CSV with numeric feature columns and a `Label` column for training.
-- **Sample labels**: `BENIGN`, `HTTP_ATTACK`, `UDP_ATTACK`.
-- **Location (sample)**: `backend/data/samples/sample_network_flows.csv`.
+- **Формат**: CSV с числовыми признаками и колонкой `Label` для обучения.
+- **Метки образца**: `BENIGN`, `HTTP_ATTACK`, `UDP_ATTACK`.
+- **Расположение (образец)**: `backend/data/samples/sample_network_flows.csv`.
 
-## Preparing real data
+## Подготовка реальных данных
 
-1. Place authorized raw exports under `backend/data/raw/` (not shipped).
-2. Normalize column names and remove identifiers you do not want in training.
-3. Generate splits under `backend/data/processed/` with clear provenance.
-4. Retrain using `configs/*.yaml` and record metrics honestly in artifacts and `reports/`.
+1. Поместите авторизованные сырые выгрузки в `backend/data/raw/` (не поставляются).
+2. Нормализуйте имена колонок и удалите идентификаторы, которые не должны попасть в обучение.
+3. Сформируйте сплиты в `backend/data/processed/` с явным происхождением.
+4. Переобучите через `configs/*.yaml` и честно зафиксируйте метрики в артефактах и `reports/`.
 
-## Limitations
+## Ограничения
 
-Demo samples are not representative of production traffic or attacker diversity. For coursework/portfolio, disclose dataset size and limitations explicitly.
+Демо-образцы не отражают production-трафик и разнообразие атак. В курсовых/портфолио явно указывайте размер датасета и ограничения.

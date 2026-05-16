@@ -1,4 +1,4 @@
-# Интеграции: SIEM и Threat Intelligence
+# Интеграции: SIEM и разведка угроз
 
 ## SIEM
 
@@ -75,7 +75,7 @@ CEF:0|AnomalyAI|AnomalyAI-Detector|2.0|AA-WAF-001|SQL injection detected|8|cs1La
 | high | 8 |
 | critical | 10 |
 
-## Threat Intelligence
+## Разведка угроз (Threat Intelligence)
 
 Локальная база индикаторов (IP, домены, хэши) в таблице `threat_intel_entries`.
 
@@ -98,7 +98,7 @@ domain,evil.example.com,critical,otx,Phishing
 hash,abc123...,medium,virustotal,Malware sample
 ```
 
-### Lookup
+### Поиск (lookup)
 
 ```http
 POST /api/v1/integrations/threat-intel/lookup

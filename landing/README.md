@@ -1,8 +1,8 @@
-# Anomaly AI — marketing landing
+# Anomaly AI — маркетинговый лендинг
 
-Premium, standalone landing page for visitors and stakeholders. Built with **Vite + React + TypeScript + Tailwind v4 + Framer Motion**.
+Отдельная премиальная посадочная страница для посетителей и стейкхолдеров. Стек: **Vite + React + TypeScript + Tailwind v4 + Framer Motion**.
 
-## Develop
+## Разработка
 
 ```bash
 cd landing
@@ -10,27 +10,27 @@ npm install
 npm run dev
 ```
 
-Serves on **http://localhost:5174** by default (dashboard stays on 5173).
+По умолчанию: **http://localhost:5174** (консоль аналитика — 5173).
 
-## Configure CTAs
+## Настройка CTA
 
-Copy `.env.example` → `.env` and set:
+Скопируйте `.env.example` → `.env`:
 
-- `VITE_DASHBOARD_URL` — React console (default `http://localhost:5173`)
-- `VITE_API_URL` — FastAPI base (default `http://localhost:8000`)
-- `VITE_REPO_URL` — GitHub root for linking `docs/API.md`
+- `VITE_DASHBOARD_URL` — React-консоль (по умолчанию `http://localhost:5173`)
+- `VITE_API_URL` — базовый URL FastAPI (по умолчанию `http://localhost:8000`)
+- `VITE_REPO_URL` — корень GitHub (по умолчанию `https://github.com/NodirOdilov/Anomaly-AI`)
 
-## Build
+## Сборка
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Static output is in `dist/` — deploy to any CDN or static host.
+Статика в `dist/` — деплой на любой CDN или static-хостинг.
 
-## Scientific documentation (in-app)
+## Научная документация (в приложении)
 
-The marketing site includes a full **Russian-language** technical manual for researchers: open **http://localhost:5174/docs** (or your deployed origin + `/docs`). The CTA button *Read the API docs* routes there.
+На сайте есть полное **русскоязычное** техническое руководство для исследователей: **http://localhost:5174/docs** (или ваш origin + `/docs`). Кнопка CTA *Документация API* ведёт туда.
 
-Configure SPA hosting so all paths fall back to `index.html` (required for direct loads of `/docs/...`).
+Для SPA настройте fallback всех путей на `index.html` (нужно для прямых заходов на `/docs/...`).

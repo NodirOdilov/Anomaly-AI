@@ -1,37 +1,37 @@
-# Model card (summary)
+# Карточка модели (кратко)
 
-## Purpose
+## Назначение
 
-Provide **baseline** classifiers for:
+**Базовые** классификаторы для:
 
-- Malicious web payload categories (defensive labeling).
-- Network flow labels for demo feature sets.
+- категорий вредоносных веб-payload (защитная разметка);
+- меток сетевых потоков на демонстрационном наборе признаков.
 
-## Intended use
+## Допустимое применение
 
-- Education, portfolio demos, local experimentation, and interviews.
-- Triage assistance on data you are authorized to process.
+- Обучение, демо портфолио, локальные эксперименты, собеседования.
+- Помощь в триаже данных, на которые у вас есть права.
 
-## Not intended use
+## Недопустимое применение
 
-- Unsupervised authorization to attack external systems.
-- Sole decision-maker for blocking production traffic without human review.
-- Claiming calibrated production metrics without proper validation data.
+- Несанкционированные атаки на внешние системы.
+- Единственный источник решений о блокировке production-трафика без участия человека.
+- Заявления о калиброванных production-метриках без надлежащей валидации.
 
-## Metrics
+## Метрики
 
-Metrics are stored inside each joblib artifact under `metrics` after training/evaluation. If you have not trained locally, API summaries may show zeros — this is intentional honesty for fresh checkouts.
+Метрики хранятся в каждом joblib-артефакте в поле `metrics` после обучения/оценки. Если локально не обучали, сводка API может показывать нули — это намеренная честность для свежих клонов.
 
-## Limitations
+## Ограничения
 
-- Small demo datasets can yield unstable or non-generalizable performance.
-- Attackers adapt; static ML models drift without monitoring and retraining.
-- Rule hints are conservative pattern matchers — they reduce ambiguity but are not a complete WAF.
+- Малые демо-датасеты дают нестабильную или непереносимую точность.
+- Атакующие адаптируются; статические ML-модели дрейфуют без мониторинга и переобучения.
+- Правила — консервативные паттерн-матчеры; они снижают неоднозначность, но не заменяют полноценный WAF.
 
-## Ethical / security posture
+## Этика и безопасность
 
-Defensive-only. Payload strings are treated as data for classification, not executed.
+Только защита. Строки payload — данные для классификации, не исполняемый код.
 
-## Operational notes
+## Эксплуатация
 
-For real deployments you would add authentication, audit logging, rate limits, SIEM export, and model monitoring — see `ROADMAP.md`.
+В реальном развёртывании добавляют аутентификацию, audit, rate limit, экспорт в SIEM и мониторинг моделей — см. [`ROADMAP.md`](ROADMAP.md).

@@ -17,5 +17,5 @@ export const links = {
       : '/health',
   /** Markdown в репозитории (если задан VITE_REPO_URL) */
   docsRepo: repo ? `${repo.replace(/\/$/, '')}/blob/main/docs/API.md` : null,
-  repo: repo || '#',
+  repo: repo?.trim() || 'https://github.com/NodirOdilov/Anomaly-AI',
 }

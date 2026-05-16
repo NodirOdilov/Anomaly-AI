@@ -1,4 +1,4 @@
-# Changelog
+# Журнал изменений
 
 Все значимые изменения проекта документируются в этом файле.
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
@@ -10,7 +10,7 @@
 
 **MEGA-апгрейд: production-grade платформа.**
 
-### Added (Backend)
+### Добавлено (бэкенд)
 
 - **Аутентификация и авторизация**:
   - JWT access/refresh токены (Argon2id хэширование паролей).
@@ -44,7 +44,7 @@
 - Расширенный `Settings`: 30+ параметров, computed-fields, валидаторы.
 - 8 новых тестов для auth, drift, registry, isolation_forest, alert_manager, siem.
 
-### Added (Frontend)
+### Добавлено (фронтенд)
 
 - **AuthContext** + `useAuth` hook + JWT в localStorage.
 - **ProtectedRoute** с проверкой ролей.
@@ -54,7 +54,7 @@
 - API-клиент `authApi` (login/refresh/logout/api-keys).
 - Axios interceptor для Bearer-токена.
 
-### Added (DevOps)
+### Добавлено (DevOps)
 
 - **Multi-stage Dockerfile** для backend (~150MB вместо ~600MB).
 - **Multi-stage Dockerfile** для frontend (nginx production).
@@ -67,7 +67,7 @@
   `security.yml` (weekly Trivy + dependency-review), `release.yml`
   (GHCR push на тег).
 
-### Added (Docs)
+### Добавлено (документация)
 
 - `docs/MEGA_PLAN.md` — master-план эволюции (6 фаз).
 - `docs/AUTH.md` — модель безопасности.
@@ -77,13 +77,13 @@
 - `CHANGELOG.md` — этот файл.
 - `CONTRIBUTING.md` — гайдлайны разработки.
 
-### Changed
+### Изменено
 
 - `Settings`: добавлены 30+ полей, разбиение по группам (DB, JWT, Redis, ML, SIEM).
 - `main.py`: middleware-стек (RequestId → Prometheus → CORS → Audit → SlowAPI).
 - Версия backend пакета: 1.0.0 → **2.0.0**.
 
-### Compatibility
+### Совместимость
 
 - Все эндпоинты `/api/v1/*` v1 сохраняют формат запросов/ответов.
 - В ответе появляется заголовок `X-Request-ID`.

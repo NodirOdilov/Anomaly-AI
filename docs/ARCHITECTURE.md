@@ -190,7 +190,7 @@ in-process кэш; следующее обращение загружает но
 
 ## Контракты между слоями
 
-### REST API ↔ Frontend
+### REST API ↔ Фронтенд
 
 - **Сериализация** — Pydantic v2 (`BaseModel` со `model_config`).
 - **Ошибки** — единый формат `{"error": "<code>", "message": "<rus>"}`.
@@ -203,14 +203,14 @@ in-process кэш; следующее обращение загружает но
 - Pydantic-схемы (`schemas/`) для request/response.
 - Никаких leaky abstractions: роутеры не знают про SQLAlchemy типы.
 
-### ML Service ↔ Artifact
+### ML-сервис ↔ Артефакт
 
 - Артефакт = `dict` с обязательными ключами: `project`, `model`, `features`,
   `labels`, `model_type`, `version`, `created_at`, `metrics`.
 - Загрузчик ([`services/artifact_loader.py`](../backend/src/anomaly_ai/services/artifact_loader.py))
   валидирует структуру и кидает `ModelArtifactError` если что-то не так.
 
-### Alert Manager ↔ Подписчики
+### Менеджер алертов ↔ Подписчики
 
 - In-memory `asyncio.Queue(maxsize=100)` на каждого WS-подписчика.
 - Backpressure: при переполнении событие в этого подписчика теряется

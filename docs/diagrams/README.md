@@ -1,18 +1,20 @@
-# Diagrams
+# Диаграммы
 
-Mermaid sources (`.mmd`) and rendered assets (`.svg`, `.png`) for README and docs.
+Исходники Mermaid (`.mmd`) и отрендеренные файлы (`.svg`, `.png`) для README и документации.
 
-| File | Used in |
-| ---- | ------- |
-| `architecture-overview` | Root `README.md` |
-| `architecture-full` | `README.md` (details) |
+| Файл | Где используется |
+| ---- | ---------------- |
+| `architecture-overview` | Корневой `README.md` |
+| `architecture-full` | `README.md` (блок details) |
 | `architecture-layers` | `ARCHITECTURE.md` |
 | `predict-flow` | `ARCHITECTURE.md` |
 | `data-model` | `ARCHITECTURE.md` |
 | `mega-plan-stack` | `MEGA_PLAN.md` |
 
-Regenerate all:
+Пересборка всех диаграмм:
 
 ```bash
 node scripts/render-diagrams.mjs
 ```
+
+Или: `make diagrams`

@@ -58,7 +58,15 @@ export function Footer() {
       <div className="mx-auto mt-12 flex max-w-6xl flex-col items-center gap-2 text-center text-sm text-slate-500">
         <p>© {new Date().getFullYear()} Anomaly AI. Создано для инженеров, аналитиков и исследователей в области защиты.</p>
         <p>
-          Разработчик:{' '}
+          <a
+            className="text-cyan-400/90 transition-colors hover:text-cyan-300 hover:underline"
+            href="https://github.com/NodirOdilov/Anomaly-AI"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+          {' · '}
           <a
             className="text-cyan-400/90 transition-colors hover:text-cyan-300 hover:underline"
             href="https://github.com/NodirOdilov"

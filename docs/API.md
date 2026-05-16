@@ -1,6 +1,6 @@
-# HTTP API
+# Справочник HTTP API
 
-Base URL (local): `http://localhost:8000`
+Базовый URL (локально): `http://localhost:8000`
 
 ## `GET /health`
 
@@ -26,13 +26,13 @@ Base URL (local): `http://localhost:8000`
 
 ## `POST /api/v1/waf/predict`
 
-Request:
+Запрос:
 
 ```json
 { "payload": "id=1' OR '1'='1" }
 ```
 
-Response (shape):
+Ответ (структура):
 
 ```json
 {
@@ -48,21 +48,21 @@ Response (shape):
 
 ## `POST /api/v1/waf/batch-predict`
 
-Request:
+Запрос:
 
 ```json
 { "payloads": ["q=books", "id=1' OR '1'='1"] }
 ```
 
-Response includes `total`, `attacks_detected`, and `results[]` with the same fields as single predict (batch items omit some optional fields).
+Ответ содержит `total`, `attacks_detected` и `results[]` с теми же полями, что и одиночный predict (в batch часть опциональных полей может отсутствовать).
 
 ## `POST /api/v1/network/predict`
 
-JSON body must include all trained feature keys (numeric). Example keys from the sample CSV:
+Тело JSON должно включать все числовые признаки, на которых обучена модель. Пример ключей из sample CSV:
 
 `duration`, `tot_fwd_pkts`, `tot_bwd_pkts`, `tot_fwd_len`, `tot_bwd_len`, `fwd_pkt_len_max`, `bwd_pkt_len_max`, `flow_pkts_s`, `flow_byts_s`
 
-Response:
+Ответ:
 
 ```json
 {
@@ -76,20 +76,22 @@ Response:
 
 ## `POST /api/v1/network/upload-csv`
 
-`multipart/form-data` with field `file` (UTF‑8 CSV). Returns counts, `top_prediction`, and per-row scores.
+`multipart/form-data`, поле `file` (CSV в UTF-8). Возвращает счётчики, `top_prediction` и оценки по строкам.
 
 ## `GET /api/v1/reports/summary`
 
-Returns `network_anomaly` and `waf_payload` metric blocks (zeros/notes when no artifact metrics exist).
+Блоки метрик `network_anomaly` и `waf_payload` (нули/примечания, если метрик артефакта нет).
 
 ## `GET /api/v1/models/status`
 
-Returns load status, paths, and versions for each artifact.
+Статус загрузки, пути и версии каждого артефакта.
 
-## Errors
+## Ошибки
 
-Validation and application errors return JSON:
+Ошибки валидации и приложения возвращаются в JSON:
 
 ```json
 { "error": "InvalidInput", "message": "Payload must not be empty" }
 ```
+
+Полный перечень v2-эндпоинтов (auth, alerts, drift, integrations): Swagger `http://localhost:8000/api/swagger` и [`AUTH.md`](AUTH.md).

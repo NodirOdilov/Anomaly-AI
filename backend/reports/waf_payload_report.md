@@ -1,11 +1,11 @@
-# WAF payload model report
+# Отчёт по модели WAF payload
 
-Updated by `python -m anomaly_ai.waf_payload.train` using `configs/waf_payload.yaml`.
+Обновляется командой `python -m anomaly_ai.waf_payload.train` с конфигом `configs/waf_payload.yaml`.
 
-## Demo / baseline notice
+## Уведомление о демо / baseline
 
-`data/samples/sample_payloads.json` contains a handful of labeled strings for pipeline validation only.
+`data/samples/sample_payloads.json` содержит несколько размеченных строк только для проверки конвейера.
 
-## Metrics (placeholder)
+## Метрики (заглушка)
 
-After training on real, authorized corpora, record validation metrics here and in the model artifact `metrics` block.
+После обучения на реальных авторизованных корпусах зафиксируйте метрики валидации здесь и в блоке `metrics` артефакта модели.

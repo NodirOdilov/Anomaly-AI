@@ -1,7 +1,7 @@
-# Data directory
+# Каталог данных
 
-- `raw/` — place full datasets you are authorized to use (not shipped).
-- `processed/` — train/test splits produced by `prepare_data` scripts.
-- `samples/` — **small demo-only** files for local runs and tests.
+- `raw/` — полные датасеты, на которые у вас есть права (в репозиторий не входят).
+- `processed/` — train/test-сплиты из скриптов `prepare_data`.
+- `samples/` — **небольшие демо-файлы** для локальных запусков и тестов.
 
-Demo samples are synthetic/small and are **not** representative of production traffic. See `docs/DATASETS.md`.
+Демо-образцы синтетические/малые и **не** отражают production-трафик. См. `docs/DATASETS.md`.

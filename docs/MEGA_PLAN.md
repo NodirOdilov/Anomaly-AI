@@ -277,6 +277,6 @@
 
 ---
 
-**Автор плана:** Anomaly AI core team.
+**Автор плана:** [Nodir Odilov](https://github.com/NodirOdilov) · репозиторий: [NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI)
 **Дата:** 2026-05-16.
 **Версия плана:** 1.0.

@@ -1,20 +1,20 @@
-# Deployment
+# Развёртывание
 
-## Local development
+## Локальная разработка
 
-### Backend
+### Бэкенд
 
 ```bash
 cd backend
 python -m venv .venv
-# activate venv (OS-specific)
+# активировать venv (зависит от ОС)
 pip install -r requirements-dev.txt
 set PYTHONPATH=src   # PowerShell: $env:PYTHONPATH="src"
 python -m pytest
 uvicorn anomaly_ai.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### Marketing landing
+### Маркетинговый лендинг
 
 ```bash
 cd landing
@@ -22,9 +22,9 @@ npm install
 npm run dev
 ```
 
-Runs on port **5174** by default. Configure `landing/.env` from `landing/.env.example` for dashboard/API/repo links in CTAs.
+По умолчанию порт **5174**. Настройте `landing/.env` из `landing/.env.example` для ссылок на консоль/API/репозиторий в CTA.
 
-### Frontend (analyst console)
+### Фронтенд (аналитическая консоль)
 
 ```bash
 cd frontend
@@ -32,60 +32,60 @@ npm install
 npm run dev
 ```
 
-Set `frontend/.env`:
+Файл `frontend/.env`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-## Docker Compose (demo)
+## Docker Compose (демо)
 
-From repository root:
+Из корня репозитория:
 
 ```bash
 docker compose up --build
 ```
 
-- Backend listens on `8000`.
-- Frontend dev server listens on `5173`.
-- The browser still calls the API at `http://localhost:8000` (host networking from the user’s machine).
+- Backend слушает `8000`.
+- Dev-сервер frontend — `5173`.
+- Браузер по-прежнему обращается к API по `http://localhost:8000` (сеть хоста).
 
-## Environment variables
+## Переменные окружения
 
-### Backend (`backend/.env.example`)
+### Бэкенд (`backend/.env.example`)
 
 - `APP_ENV`, `APP_NAME`, `APP_VERSION`
-- `MODEL_DIR` (default `models`)
-- `DATA_DIR` (default `data`)
+- `MODEL_DIR` (по умолчанию `models`)
+- `DATA_DIR` (по умолчанию `data`)
 
-### Frontend (`frontend/.env.example`)
+### Фронтенд (`frontend/.env.example`)
 
 - `VITE_API_BASE_URL`
 
-## Vercel (single project)
+## Vercel (один проект)
 
-The repository root includes a Vercel-oriented layout:
+В корне репозитория подготовлена конфигурация для Vercel:
 
-- `vercel.json` — `framework: null` (Other preset), `installCommand` (uses **`uv pip install --system`** so dependencies install on Vercel’s PEP 668 / uv-managed Python; plain `pip install` fails), `buildCommand`, SPA rewrites for `/docs/*` and `/console/*`, and Python function duration.
-- `api/index.py` — sets `BACKEND_ROOT` to `./backend`, extends `PYTHONPATH`, and exports the FastAPI `app` (required under `api/` so `vercel.json` `functions` glob matches; Vercel CLI 51+ rejects root `server.py` in `functions`).
-- Root `requirements.txt` — duplicate of `backend/requirements.txt` (Vercel’s parser does not support `-r` includes from another file).
-- `scripts/vercel-build.mjs` — builds `landing/` into `public/` and `frontend/` into `public/console/` (with `VITE_BASE=/console/`). The `public/` folder is build output and may stay gitignored locally; it is generated during Vercel build and then served from the CDN.
+- `vercel.json` — `framework: null` (пресет Other), `installCommand` (использует **`uv pip install --system`**, т. к. на Vercel PEP 668 / uv-managed Python обычный `pip install` может падать), `buildCommand`, SPA-rewrite для `/docs/*` и `/console/*`, длительность Python-функции.
+- `api/index.py` — задаёт `BACKEND_ROOT` в `./backend`, расширяет `PYTHONPATH`, экспортирует FastAPI `app` (нужен в `api/`, чтобы glob `functions` в `vercel.json` совпадал; Vercel CLI 51+ не принимает корневой `server.py` в `functions`).
+- Корневой `requirements.txt` — копия `backend/requirements.txt` (парсер Vercel не поддерживает `-r` из другого файла).
+- `scripts/vercel-build.mjs` — собирает `landing/` в `public/` и `frontend/` в `public/console/` (`VITE_BASE=/console/`). Папка `public/` — артефакт сборки, может быть в `.gitignore` локально; на Vercel генерируется при build и отдаётся с CDN.
 
-**GitHub import:** connect the repo and deploy with defaults. Root directory should stay the repository root; no manual env vars are required for CORS (when `VERCEL` is set, the API uses permissive CORS without cookies, matching the SPA clients).
+**Импорт с GitHub:** подключите репозиторий и деплойте с настройками по умолчанию. Root directory — корень репозитория; для CORS отдельные env не нужны (при `VERCEL` API использует открытый CORS без cookies, как SPA-клиенты).
 
-If the Vercel UI suggests **“Services”** / `experimentalServices`, prefer **Other** (single project) with root **`.`**: this repo relies on **`public/`** for the landing and SPAs on the CDN, and the Python handler (`api/index.py`) only for API paths. Putting FastAPI on `routePrefix: "/"` via `experimentalServices` sends **every** request (including `/`) to Python, which has no `GET /` route, so the site shows `{"detail":"Not Found"}`. Use **`functions`** targeting **`api/index.py`** for `maxDuration`, not root `server.py` (CLI 51+ does not match root files in `functions`).
+Если UI Vercel предлагает **«Services»** / `experimentalServices`, предпочтите **Other** (один проект) с корнем **`.`**: репозиторий опирается на **`public/`** для лендинга и SPA на CDN, а Python-обработчик (`api/index.py`) — только для путей API. FastAPI с `routePrefix: "/"` через `experimentalServices` отправляет **все** запросы (включая `/`) в Python, где нет маршрута `GET /`, и сайт отвечает `{"detail":"Not Found"}`. Для `maxDuration` используйте **`functions`** с **`api/index.py`**, не корневой `server.py`.
 
-After deploy:
+После деплоя:
 
-- Marketing site: `/`
-- In-app docs (landing SPA): `/docs/*`
-- Analyst console: `/console/*`
+- Маркетинг: `/`
+- Встроенная документация (landing SPA): `/docs/*`
+- Аналитическая консоль: `/console/*`
 - API: `/health`, `/api/v1/*`
-- Swagger UI: `/api/swagger` (marketing `/docs` is reserved for the React docs site)
+- Swagger UI: `/api/swagger` (маркетинговый путь `/docs` зарезервирован под React-документацию)
 
-Serverless limits (cold start, duration, bundle size) apply; heavy ML workloads may still be better on Docker or a dedicated API host.
+Действуют лимиты serverless (cold start, duration, размер бандла); тяжёлый ML лучше на Docker или выделенном API-хосте.
 
-## Notes
+## Замечания
 
-- Mount `backend/models` and `backend/data` as volumes when you want persistent artifacts and datasets inside containers.
-- For production you would typically serve the Vite `dist/` build behind a reverse proxy, not the dev server.
+- Смонтируйте `backend/models` и `backend/data` как volumes, если нужны постоянные артефакты и датасеты в контейнерах.
+- В production обычно отдают собранный Vite `dist/` за reverse proxy, а не dev-сервер.

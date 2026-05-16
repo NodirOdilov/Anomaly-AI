@@ -1,13 +1,13 @@
-# Network anomaly model report
+# Отчёт по модели сетевых аномалий
 
-This report is updated when you run `python -m anomaly_ai.network_anomaly.train`.
+Отчёт обновляется при запуске `python -m anomaly_ai.network_anomaly.train`.
 
-Until training is executed on your machine, treat metrics as **not populated** (zeros in API summary indicate no evaluated artifact on disk).
+Пока обучение не выполнено на вашей машине, метрики считаются **не заполненными** (нули в сводке API означают отсутствие оценённого артефакта на диске).
 
-## Demo / baseline notice
+## Уведомление о демо / baseline
 
-The bundled `data/samples/sample_network_flows.csv` is intentionally tiny and only proves the training/inference pipeline. **Do not** use these numbers for production decisions.
+В комплекте `data/samples/sample_network_flows.csv` намеренно крошечный и только проверяет конвейер обучения/инференса. **Не** используйте эти цифры для production-решений.
 
-## Metrics (placeholder)
+## Метрики (заглушка)
 
-Run `train` and `evaluate` to fill confusion matrix, FPR/FNR, and related fields.
+Запустите `train` и `evaluate`, чтобы заполнить матрицу ошибок, FPR/FNR и связанные поля.

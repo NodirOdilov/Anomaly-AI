@@ -1,8 +1,8 @@
 # Anomaly AI — backend
 
-FastAPI service exposing health, info, WAF payload scoring, network CSV scoring, reports, and model status.
+Сервис FastAPI: health, info, скоринг WAF payload, пакетный скоринг сетевых CSV, отчёты и статус моделей.
 
-## Quick start
+## Быстрый старт
 
 ```bash
 cd backend
@@ -12,7 +12,7 @@ python -m pytest
 uvicorn anomaly_ai.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-## Train demo models
+## Обучение демо-моделей
 
 ```bash
 $env:PYTHONPATH="src"
@@ -20,19 +20,19 @@ python -m anomaly_ai.waf_payload.train --config configs/waf_payload.yaml
 python -m anomaly_ai.network_anomaly.train --config configs/network_anomaly.yaml
 ```
 
-## CLI examples
+## Примеры CLI
 
 ```bash
 python -m anomaly_ai.waf_payload.predict --payload "id=1' OR '1'='1"
 python -m anomaly_ai.network_anomaly.predict --model models/network_anomaly_model.joblib --input data/samples/sample_network_flows.csv
 ```
 
-## Layout
+## Структура
 
-- `src/anomaly_ai/` — application code
-- `configs/` — YAML training/app configuration
-- `data/` — samples and optional datasets
-- `models/` — joblib artifacts (generated)
-- `tests/` — pytest suite
+- `src/anomaly_ai/` — код приложения
+- `configs/` — YAML для обучения и приложения
+- `data/` — образцы и опциональные датасеты
+- `models/` — артефакты joblib (генерируются)
+- `tests/` — pytest
 
-See repository `docs/API.md` for endpoint documentation.
+Документация эндпоинтов: `docs/API.md`.

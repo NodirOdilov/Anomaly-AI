@@ -1,8 +1,8 @@
 # Anomaly AI — frontend
 
-React + TypeScript + Vite + Tailwind dashboard for interacting with the backend.
+Панель аналитика на React + TypeScript + Vite + Tailwind для работы с backend.
 
-## Quick start
+## Быстрый старт
 
 ```bash
 cd frontend
@@ -10,23 +10,26 @@ npm install
 npm run dev
 ```
 
-Create `.env` from `.env.example`:
+Создайте `.env` из `.env.example`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-## Production build
+## Production-сборка
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Pages
+## Страницы
 
-- `/` dashboard
-- `/waf` payload analyzer
-- `/network` CSV analyzer
-- `/reports` metrics + charts
-- `/docs` in-app documentation
+- `/` — дашборд
+- `/waf` — анализатор payload
+- `/network` — анализ CSV
+- `/reports` — метрики и графики
+- `/docs` — встроенная документация
+- `/login` — вход
+- `/alerts` — поток алертов (WebSocket)
+- `/admin/audit` — журнал аудита

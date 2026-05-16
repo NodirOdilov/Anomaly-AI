@@ -1,31 +1,34 @@
-# Security Policy
+# Политика безопасности
 
-## Defensive use only
+## Только защитное применение
 
-Anomaly AI is intended **only** for defensive security purposes: education, research, portfolio demonstration, and **detection** of potentially malicious patterns in data you are authorized to analyze.
+Anomaly AI предназначен **исключительно** для задач защитной безопасности: обучение, исследования, демонстрация портфолио и **обнаружение** потенциально вредоносных паттернов в данных, на обработку которых у вас есть права.
 
-## Allowed uses
+## Допустимое использование
 
-- Learning how ML can assist SOC and application security workflows
-- Classifying payloads and network flow features **you own or have permission to process**
-- Local demos, coursework, and interviews with synthetic or authorized datasets
+- Изучение того, как ML помогает в рабочих процессах SOC и безопасности приложений
+- Классификация payload и признаков сетевых потоков **которыми вы владеете или имеете право обрабатывать**
+- Локальные демо, учебные работы и собеседования на синтетических или авторизованных наборах данных
 
-## Prohibited uses
+## Запрещённое использование
 
-1. Attacking or attempting to compromise real systems without explicit authorization
-- Unauthorized scanning, exploitation, or bypass of production defenses
-- Using the project as offensive tooling against third parties
+1. Атаки или попытки компрометации реальных систем без явного разрешения владельца
+- Несанкционированное сканирование, эксплуатация или обход производственных средств защиты
+- Использование проекта как наступательного инструмента против третьих лиц
 
-2. Misrepresenting model outputs as guaranteed ground truth — models here may be **demo/baseline** quality; always validate in your environment.
+2. Выдача выходов модели за безусловную истину — модели здесь могут быть **демо/базовыми**; всегда проверяйте в своей среде.
 
-## Reporting vulnerabilities
+## Сообщение об уязвимостях
 
-If you discover a security issue in this repository (e.g., unsafe defaults in deployment), please open a private report or issue according to the repository maintainer’s preferred process.
+Если вы обнаружили проблему безопасности в этом репозитории (например, небезопасные значения по умолчанию при развёртывании), откройте приватный отчёт или issue согласно предпочтительному процессу сопровождающего.
 
-## Payload examples
+## Примеры payload
 
-Sample payloads (e.g., SQLi/XSS strings) exist **solely** as labeled inputs for classification demos. They must not be used to attack live applications.
+Образцы payload (строки SQLi/XSS и т. п.) существуют **только** как размеченные входы для демонстрации классификации. Их нельзя использовать для атак на работающие приложения.
 
-## Contact
+## Контакты
 
-Use the repository’s issue tracker for security-related questions tied to this codebase.
+Для вопросов по безопасности, связанных с этим кодом, используйте issue-трекер:
+[github.com/NodirOdilov/Anomaly-AI](https://github.com/NodirOdilov/Anomaly-AI/issues).
+
+**Автор:** [Nodir Odilov](https://github.com/NodirOdilov)

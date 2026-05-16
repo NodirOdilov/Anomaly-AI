@@ -1,4 +1,4 @@
-# Authentication & Authorization
+# Аутентификация и авторизация
 
 > Модель безопасности Anomaly AI v2.
 
@@ -45,7 +45,7 @@ BOOTSTRAP_ADMIN_PASSWORD=<strong_password>
 
 ## Эндпоинты
 
-### Login
+### Вход (login)
 
 ```http
 POST /api/v1/auth/login
@@ -66,14 +66,14 @@ Content-Type: application/json
 }
 ```
 
-### Refresh
+### Обновление токена (refresh)
 
 ```http
 POST /api/v1/auth/refresh
 { "refresh_token": "..." }
 ```
 
-### Logout (отзыв refresh)
+### Выход (logout, отзыв refresh)
 
 ```http
 POST /api/v1/auth/logout

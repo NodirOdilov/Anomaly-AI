@@ -1,5 +1,5 @@
-# Model artifacts
+# Артефакты моделей
 
-Trained models are saved here as `.joblib` bundles (model + preprocessor + metadata).
+Обученные модели сохраняются здесь в виде бандлов `.joblib` (модель + препроцессор + метаданные).
 
-For a fresh checkout, run training (see root `README.md`) or rely on tests/CI to generate demo artifacts.
+В свежем клоне запустите обучение (см. корневой `README.md`) или полагайтесь на тесты/CI для генерации демо-артефактов.

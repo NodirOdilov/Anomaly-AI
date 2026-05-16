@@ -9,7 +9,13 @@ description = "Anomaly AI v2 — FastAPI backend для ML-обнаружени�
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
+authors = [{ name = "Nodir Odilov" }]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/NodirOdilov/Anomaly-AI"
+Repository = "https://github.com/NodirOdilov/Anomaly-AI"
+Issues = "https://github.com/NodirOdilov/Anomaly-AI/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

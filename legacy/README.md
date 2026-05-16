@@ -1,8 +1,8 @@
-# Legacy prototypes (`anom/`, `ngfw/`)
+# Устаревшие прототипы (`anom/`, `ngfw/`)
 
-This folder preserves the original experimental code:
+В этой папке сохранён ранний экспериментальный код:
 
-- `anom/` — early network anomaly experiments (note issues like `live_dat.csv` vs `live_data.csv`, `DataFrame.append`, broken ensemble references, and notebook-only syntax in `Untitled30.py`).
-- `ngfw/` — early WAF payload experiments mixing scikit-learn and Keras.
+- `anom/` — ранние эксперименты с сетевыми аномалиями (известные проблемы: `live_dat.csv` vs `live_data.csv`, `DataFrame.append`, сломанные ссылки на ансамбли, синтаксис ноутбуков в `Untitled30.py`).
+- `ngfw/` — ранние эксперименты с WAF payload на scikit-learn и Keras.
 
-The maintained implementation lives in `backend/src/anomaly_ai/` and `frontend/`. Treat legacy files as historical reference only.
+Поддерживаемая реализация: `backend/src/anomaly_ai/` и `frontend/`. Файлы legacy — только историческая справка.
