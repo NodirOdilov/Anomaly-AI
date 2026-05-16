@@ -60,7 +60,7 @@ def train(
 ) -> Pipeline:
     """Обучить и (опционально) сохранить артефакт."""
     feature_list = list(features)
-    X = clean_numeric_frame(frame[feature_list])
+    X = clean_numeric_frame(frame, feature_list)
     pipeline = build_pipeline()
     pipeline.fit(X)
     if output_path:
@@ -84,7 +84,7 @@ def predict_decision(
     """Оценить один поток."""
     feature_list = list(feature_order)
     df = pd.DataFrame([features_dict])[feature_list]
-    df = clean_numeric_frame(df)
+    df = clean_numeric_frame(df, feature_list)
     raw_score = float(pipeline.score_samples(df)[0])
     label = int(pipeline.predict(df)[0])  # -1 = аномалия, 1 = нормально
     is_anomaly = label == -1
