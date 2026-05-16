@@ -1,0 +1,98 @@
+flowchart TB
+    subgraph clients["1 · CLIENT TIER"]
+        direction LR
+        c1["Edge Sensor"]
+        c2["Analyst Console"]
+        c3["CLI / SDK"]
+        c4["CI / Automation"]
+    end
+
+    subgraph edge["2 · EDGE · NGINX"]
+        direction LR
+        e1["TLS / HSTS"]
+        e2["Reverse Proxy"]
+        e3["Static SPA"]
+    end
+
+    subgraph gateway["3 · FASTAPI GATEWAY"]
+        direction TB
+        subgraph mw["Middleware"]
+            direction LR
+            m1["Request ID"]
+            m2["Prometheus"]
+            m3["CORS"]
+            m4["Audit Log"]
+            m5["Rate Limit"]
+        end
+        subgraph api["API Surface"]
+            direction LR
+            a1["REST v1/v2"]
+            a2["WebSocket"]
+            a3["OpenAPI"]
+            a4["Health /metrics"]
+        end
+    end
+
+    subgraph domain["4 · DOMAIN SERVICES"]
+        direction LR
+        d1["Auth · RBAC"]
+        d2["WAF ML"]
+        d3["Network ML"]
+        d4["Drift"]
+        d5["Registry"]
+        d6["Threat Intel"]
+    end
+
+    subgraph data["5 · PERSISTENCE"]
+        direction LR
+        p1[("PostgreSQL")]
+        p2[("Redis")]
+        p3[("Artifacts")]
+    end
+
+    alerts["6 · Alert Manager"]
+
+    subgraph outbound["7 · INTEGRATIONS"]
+        direction LR
+        o1["SIEM JSON/CEF"]
+        o2["Intel Feeds"]
+    end
+
+    subgraph observe["OBSERVABILITY"]
+        direction LR
+        ob1["structlog"]
+        ob2["Prometheus"]
+        ob3["Grafana"]
+        ob4["Sentry"]
+    end
+
+    clients ==> edge
+    edge ==> m1
+    m5 --> a1
+    a1 --> domain
+    domain --> data
+    d2 & d3 --> alerts
+    alerts ==> outbound
+    a2 -.-> c2
+    a1 -.-> ob2
+    ob2 --> ob3
+    mw -.-> ob1
+    a1 -.-> ob4
+
+    classDef client fill:#0969da,stroke:#58a6ff,color:#fff,stroke-width:2px
+    classDef edgeNode fill:#8250df,stroke:#d2a8ff,color:#fff,stroke-width:2px
+    classDef gw fill:#1f6feb,stroke:#79c0ff,color:#fff,stroke-width:2px
+    classDef domainNode fill:#8957e5,stroke:#d2a8ff,color:#fff,stroke-width:2px
+    classDef dataNode fill:#9e6a03,stroke:#f0883e,color:#fff,stroke-width:2px
+    classDef alertNode fill:#da3633,stroke:#ff7b72,color:#fff,stroke-width:2px
+    classDef outNode fill:#238636,stroke:#3fb950,color:#fff,stroke-width:2px
+    classDef obsNode fill:#1a7f37,stroke:#56d364,color:#fff,stroke-width:2px
+
+    class c1,c2,c3,c4 client
+    class e1,e2,e3 edgeNode
+    class m1,m2,m3,m4,m5,a1,a2,a3,a4 gw
+    class d1,d2,d3,d4,d5,d6 domainNode
+    class p1,p2,p3 dataNode
+    class alerts alertNode
+    class o1,o2 outNode
+    class ob1,ob2,ob3,ob4 obsNode
